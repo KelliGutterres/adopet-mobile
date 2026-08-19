@@ -126,8 +126,8 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] Telas de protótipo: autenticação/cadastro; listagem de animais
 
 ### Web (ONG = administrador do painel)
-- [ ] Autenticação da ONG (e-mail/senha) — RF0009
-- [ ] Painel de gerenciamento de animais — RF0010
+- [x] Autenticação da ONG (e-mail/senha) — RF0009
+- [x] Listagem de animais no painel (adoção, encontrados, perdidos) — RF0004 / RF0010 parcial (web spec 003)
 - [ ] CRUD de animais para adoção (cadastro, edição, exclusão) — RF0003 / protótipos Fig. 16–17
 - [ ] Gerenciamento de usuários e registros de animais (casos de uso da ONG na Parte 1)
 - [ ] Telas de protótipo: login web; cadastro de animal; edição/gerenciamento
