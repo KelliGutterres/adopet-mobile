@@ -19,11 +19,13 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 | Spec | Tema | Status |
 |------|------|--------|
 | [001](./001-estrutura-inicial-mobile.md) | Scaffold React Native (executado com Expo) | aprovada e implementada |
-| 002 | Login + cadastro + esqueci senha do usuário + JWT | planejada (após 001) |
+| [002](./002-login-usuario.md) | Tela de login do usuário + JWT | aprovada e implementada |
 | 003 | Listagem de animais (A / P / E) | planejada |
 | 004 | Detalhe do animal | planejada |
 | 005 | CRUD de animal pelo usuário | planejada |
 | 006 | Filtros de busca (RF0005) | planejada — fase 2 |
 | 007 | Perfil / editar conta | planejada — depende de API |
 
-Roadmap detalhado e pontos em aberto: spec 001.
+Roadmap detalhado: spec 001. Auth do usuário: spec 002.
+
+Cadastro de usuário (card Trello 51) e esqueci senha **não** entram na 002 — specs seguintes.

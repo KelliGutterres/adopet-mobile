@@ -86,13 +86,14 @@ adopet-mobile/
 │   ├── navigation/
 │   ├── services/        # api.js (fetch + EXPO_PUBLIC_API_URL)
 │   ├── hooks/
+│   ├── context/         # AuthContext (spec 002)
 │   └── theme/
 ├── App.js
 ├── index.js
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login/cadastro/esqueci senha: spec 002.
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro e esqueci senha: specs seguintes.
 
 Backend (quando a fase de IA começar):
 
@@ -129,7 +130,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 ### Mobile (usuário)
 - [x] Scaffold Expo + pastas + nav + cliente HTTP (spec 001)
 - [ ] Cadastro e edição de conta (dados pessoais, e-mail, senha) — RF0001
-- [ ] Login (e-mail/senha) — RF0002
+- [x] Login (e-mail/senha) — RF0002
 - [ ] Cadastro/edição/exclusão de animais (nome, espécie, raça, idade, descrição, status, imagens) — RF0003
 - [ ] Listagem: adoção, perdidos, localizados/encontrados — RF0004
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
@@ -322,11 +323,12 @@ Critério de pronto: [comportamento verificável]
 - Painel da ONG focado em gestão (CRUD), responsivo (RNF0006).
 
 ### Mobile (React Native)
-- Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `theme`.
+- Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `context` / `theme`.
 - Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
 - Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL`.
 - Navegação: **React Navigation** (`native-stack`).
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
+- Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
 - Loading, empty state e erro em listas (nas specs de listagem).
 - Câmera/galeria para RF0007 (fase 2).
 
@@ -378,6 +380,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-02 | Apenas 2 atores: **Usuário** e **ONG** (ONG = admin; sem role admin separado) | Decisão do autor |
 | 2026-08-03 | **SDD** obrigatório: spec em `specs/` antes de cada implementação; pasta em todos os repos | Decisão do autor |
 | 2026-08-22 | Mobile: React Native em **JavaScript**, executado com **Expo** (Go + emulador); **React Navigation**; template `blank`; HTTP `fetch` | Spec 001 / autora |
+| 2026-08-22 | Mobile: login do usuário com JWT no **SecureStore**; cadastro e esqueci senha ficam para specs seguintes | Spec 002 / autora |
 
 ---
 
@@ -390,8 +393,9 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] MVP: CRUD primeiro
 - [x] SDD + pasta `specs/` em cada repositório
 - [x] Scaffold do app mobile (Expo + RN JS — spec 001)
+- [x] Login mobile do usuário (JWT + SecureStore — spec 002)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
-- [ ] Anexar protótipos/diagramas em `docs/` (Fig. 13 e 15 nas specs das telas)
+- [ ] Anexar protótipos/diagramas em `docs/` (Fig. 15 nas specs das telas; Fig. 13 anexada no mobile)
 
 ---
 
@@ -407,3 +411,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-02 | Atores: Usuário e ONG (ONG é o admin) |
 | 2026-08-03 | SDD obrigatório; pasta `specs/` em backend, web e mobile |
 | 2026-08-22 | Scaffold mobile (spec 001): Expo + RN JS, React Navigation, `fetch`, pastas `src/` |
+| 2026-08-22 | Login mobile (spec 002): JWT no SecureStore, tela Fig. 13; cadastro/esqueci senha fora |

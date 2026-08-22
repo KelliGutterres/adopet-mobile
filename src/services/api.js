@@ -1,3 +1,5 @@
+import { getMemoryToken } from './session';
+
 const DEFAULT_API_URL = 'http://127.0.0.1:3000';
 const NETWORK_ERROR_MESSAGE =
   'Não foi possível conectar à API. Verifique se o backend está no ar.';
@@ -18,6 +20,7 @@ export function apiUrl(path = '') {
 
 export async function request(path, options = {}) {
   const { method = 'GET', headers = {}, body, ...rest } = options;
+  const token = getMemoryToken();
 
   let response;
   try {
@@ -25,6 +28,7 @@ export async function request(path, options = {}) {
       method,
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,

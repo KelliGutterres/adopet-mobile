@@ -26,8 +26,8 @@ Não commitar `.env`.
 | `npm start` / `npx expo start` | Metro + QR Code (Expo Go) |
 | `npm run android` | abre no emulador/dispositivo Android |
 
-Login, cadastro e esqueci senha entram na spec 002. Esta fatia só mostra o placeholder “AdoPet — app do usuário”.
+Login com e-mail e senha (spec 002). Cadastro e esqueci senha entram em specs seguintes. Seed: `usuario@adopet.local` / `senha123`.
 
 ## Specs
 
-Ver `specs/`. Scaffold: spec 001.
+Ver `specs/`. Scaffold: spec 001. Login: spec 002.

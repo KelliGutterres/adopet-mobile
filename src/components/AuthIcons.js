@@ -1,0 +1,71 @@
+import Svg, { Circle, Path, Rect } from 'react-native-svg';
+import { colors } from '../theme/colors';
+
+const STROKE = {
+  fill: 'none',
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+};
+
+export function MailIcon({ color = colors.icon, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Rect x="3" y="5" width="18" height="14" rx="2" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M3 7l9 6 9-6" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
+export function LockIcon({ color = colors.icon, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Rect x="5" y="11" width="14" height="10" rx="2" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M8 11V8a4 4 0 0 1 8 0v3" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
+export function EyeIcon({ color = colors.icon, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Circle cx="12" cy="12" r="3" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
+export function EyeOffIcon({ color = colors.icon, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M3 3l18 18" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path
+        d="M10.6 10.6a3 3 0 0 0 4.2 4.2"
+        stroke={color}
+        strokeWidth={1.8}
+        {...STROKE}
+      />
+      <Path
+        d="M9.9 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a18.5 18.5 0 0 1-3.2 3.8"
+        stroke={color}
+        strokeWidth={1.8}
+        {...STROKE}
+      />
+      <Path
+        d="M6.1 6.1A18 18 0 0 0 2 12s3.5 7 10 7a10.4 10.4 0 0 0 4.4-.9"
+        stroke={color}
+        strokeWidth={1.8}
+        {...STROKE}
+      />
+    </Svg>
+  );
+}
+
+export function LogInIcon({ color = colors.surface, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M10 17l5-5-5-5" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M15 12H3" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
