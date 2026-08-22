@@ -72,15 +72,27 @@ Cada parte do sistema terá seu próprio repositório Git. Manter este documento
 | `adopet-web` | React — painel da ONG (administração) |
 | `adopet-mobile` | React Native — usuário |
 
-Estrutura sugerida (todos os repos):
+Estrutura sugerida (todos os repos): `specs/`, `docs/`, `.cursor/rules/`.
+
+Mobile (`adopet-mobile`, spec 001):
 
 ```
-adopet-*/ 
-├── specs/               # Specs SDD — obrigatório antes de implementar
-├── docs/                # Contexto do projeto (este arquivo)
-├── .cursor/rules/       # Regras para a IA
-└── ...                  # código (src/, app/, ai/, etc.)
+adopet-mobile/
+├── specs/
+├── docs/
+├── src/
+│   ├── screens/
+│   ├── components/
+│   ├── navigation/
+│   ├── services/        # api.js (fetch + EXPO_PUBLIC_API_URL)
+│   ├── hooks/
+│   └── theme/
+├── App.js
+├── index.js
+└── app.json
 ```
+
+> Scaffold Expo + React Navigation: spec 001. Login/cadastro/esqueci senha: spec 002.
 
 Backend (quando a fase de IA começar):
 
@@ -93,7 +105,7 @@ adopet-backend/
 └── ...
 ```
 
-> Este workspace atual (`AdoPetMobile-main`) pode ser o ponto de partida do mobile ou da documentação; ao criar os outros repos, copiar/adaptar `docs/CONTEXTO-PROJETO.md` e `.cursor/rules/`.
+> Este workspace (`adopet-mobile`) é o app React Native do usuário, executado com Expo (spec 001).
 
 ### Spec-Driven Development (SDD) — obrigatório
 
@@ -115,6 +127,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 ## 3. Escopo funcional (checklist de implementação)
 
 ### Mobile (usuário)
+- [x] Scaffold Expo + pastas + nav + cliente HTTP (spec 001)
 - [ ] Cadastro e edição de conta (dados pessoais, e-mail, senha) — RF0001
 - [ ] Login (e-mail/senha) — RF0002
 - [ ] Cadastro/edição/exclusão de animais (nome, espécie, raça, idade, descrição, status, imagens) — RF0003
@@ -154,7 +167,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 
 | Camada | Tecnologia | Papel |
 |--------|------------|--------|
-| Mobile | React Native | App multiplataforma Android/iOS |
+| Mobile | React Native + **Expo** (JavaScript) | App do usuário; Expo Go e emulador Android |
 | Web | React (ReactJS) | Painel da ONG; UI responsiva |
 | Backend | Node.js | Regras de negócio, auth, orquestração, API REST |
 | Banco | PostgreSQL | Dados estruturados (usuários, animais, etc.) |
@@ -309,9 +322,13 @@ Critério de pronto: [comportamento verificável]
 - Painel da ONG focado em gestão (CRUD), responsivo (RNF0006).
 
 ### Mobile (React Native)
-- Organização por feature quando possível.
-- Loading, empty state e erro em listas.
-- Câmera/galeria para RF0007.
+- Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `theme`.
+- Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
+- Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL`.
+- Navegação: **React Navigation** (`native-stack`).
+- Estilo: `StyleSheet` + `src/theme/colors.js`.
+- Loading, empty state e erro em listas (nas specs de listagem).
+- Câmera/galeria para RF0007 (fase 2).
 
 ### IA (Python, pasta dentro do backend)
 - Endpoint(s) claros de comparação; contrato JSON documentado.
@@ -360,6 +377,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-07-27 | Persistência com **Prisma** (ORM) sobre PostgreSQL | Decisão do autor |
 | 2026-08-02 | Apenas 2 atores: **Usuário** e **ONG** (ONG = admin; sem role admin separado) | Decisão do autor |
 | 2026-08-03 | **SDD** obrigatório: spec em `specs/` antes de cada implementação; pasta em todos os repos | Decisão do autor |
+| 2026-08-22 | Mobile: React Native em **JavaScript**, executado com **Expo** (Go + emulador); **React Navigation**; template `blank`; HTTP `fetch` | Spec 001 / autora |
 
 ---
 
@@ -371,8 +389,9 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] 3 repositórios separados (IA no backend)
 - [x] MVP: CRUD primeiro
 - [x] SDD + pasta `specs/` em cada repositório
+- [x] Scaffold do app mobile (Expo + RN JS — spec 001)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
-- [ ] Anexar protótipos/diagramas em `docs/` (opcional)
+- [ ] Anexar protótipos/diagramas em `docs/` (Fig. 13 e 15 nas specs das telas)
 
 ---
 
@@ -387,3 +406,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-07-27 | Decisão: Prisma como ORM |
 | 2026-08-02 | Atores: Usuário e ONG (ONG é o admin) |
 | 2026-08-03 | SDD obrigatório; pasta `specs/` em backend, web e mobile |
+| 2026-08-22 | Scaffold mobile (spec 001): Expo + RN JS, React Navigation, `fetch`, pastas `src/` |
