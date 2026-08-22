@@ -1,6 +1,6 @@
 # AdoPet Mobile — app do usuário
 
-App em **React Native**, executado com **Expo**. O canal **mobile é exclusivo do usuário**; a ONG usa o painel web.
+App em **React Native**, executado com **Expo SDK 54** (`expo@54.0.37`). O canal **mobile é exclusivo do usuário**; a ONG usa o painel web.
 
 ## Pré-requisitos
 

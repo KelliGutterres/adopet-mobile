@@ -381,6 +381,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-03 | **SDD** obrigatório: spec em `specs/` antes de cada implementação; pasta em todos os repos | Decisão do autor |
 | 2026-08-22 | Mobile: React Native em **JavaScript**, executado com **Expo** (Go + emulador); **React Navigation**; template `blank`; HTTP `fetch` | Spec 001 / autora |
 | 2026-08-22 | Mobile: login do usuário com JWT no **SecureStore**; cadastro e esqueci senha ficam para specs seguintes | Spec 002 / autora |
+| 2026-08-22 | Mobile: Expo **SDK 54** (`expo@54.0.37`), alinhado ao Expo Go da App Store (iOS) | Autora |
 
 ---
 
@@ -412,3 +413,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-03 | SDD obrigatório; pasta `specs/` em backend, web e mobile |
 | 2026-08-22 | Scaffold mobile (spec 001): Expo + RN JS, React Navigation, `fetch`, pastas `src/` |
 | 2026-08-22 | Login mobile (spec 002): JWT no SecureStore, tela Fig. 13; cadastro/esqueci senha fora |
+| 2026-08-22 | Mobile rebaixado para Expo SDK 54 (`54.0.37`) para abrir no Expo Go do iPhone |
