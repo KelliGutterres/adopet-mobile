@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import {
   KeyboardAvoidingView,
@@ -10,63 +10,44 @@ import {
   View,
 } from 'react-native';
 import AuthLayout from '../components/AuthLayout';
-import { LogInIcon, MailIcon } from '../components/AuthIcons';
+import { LockIcon, MailIcon } from '../components/AuthIcons';
 import PasswordField from '../components/PasswordField';
 import TextField from '../components/TextField';
-import { useAuth } from '../hooks/useAuth';
-import { isEmailValid, MIN_SENHA } from '../services/authService';
+import { isEmailValid, MIN_SENHA, redefinirSenhaUsuario } from '../services/authService';
 import { colors } from '../theme/colors';
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => String(route.params?.email || '').trim());
   const [senha, setSenha] = useState('');
+  const [confirmacao, setConfirmacao] = useState('');
   const [error, setError] = useState('');
-  const [info, setInfo] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const consumedParams = useRef('');
 
   useFocusEffect(
     useCallback(() => {
-      const params = route.params || {};
-      const emailParam = typeof params.email === 'string' ? params.email.trim() : '';
-      const senhaAtualizada = Boolean(params.senhaAtualizada);
-      const token = `${senhaAtualizada}|${emailParam}`;
-
-      if (!emailParam && !senhaAtualizada) {
-        consumedParams.current = '';
-        return;
+      const next = String(route.params?.email || '').trim();
+      if (next) {
+        setEmail(next);
       }
-      if (consumedParams.current === token) {
-        return;
-      }
-      consumedParams.current = token;
-
-      if (emailParam) {
-        setEmail(emailParam);
-      }
-      if (senhaAtualizada) {
-        setInfo('Senha atualizada. Faça login com a nova senha.');
-        setError('');
-        setSenha('');
-      }
-
-      navigation.setParams({ email: undefined, senhaAtualizada: undefined });
-    }, [navigation, route.params]),
+    }, [route.params?.email]),
   );
 
-  function handleForgot() {
+  function goToLogin(extra = {}) {
     const trimmed = email.trim();
-    navigation.navigate('ForgotPassword', trimmed ? { email: trimmed } : {});
+    navigation.navigate('Login', {
+      ...(trimmed ? { email: trimmed } : {}),
+      ...extra,
+    });
   }
 
   async function handleSubmit() {
     setError('');
-    setInfo('');
 
-    if (!isEmailValid(email)) {
+    const emailTrim = email.trim();
+
+    if (!isEmailValid(emailTrim)) {
       setError('Informe um e-mail válido');
       return;
     }
@@ -74,10 +55,18 @@ export default function LoginScreen() {
       setError('A senha deve ter no mínimo 6 caracteres');
       return;
     }
+    if (senha !== confirmacao) {
+      setError('As senhas não coincidem');
+      return;
+    }
 
     setSubmitting(true);
     try {
-      await login({ email: email.trim(), senha });
+      await redefinirSenhaUsuario({ email: emailTrim, senha });
+      navigation.navigate('Login', {
+        senhaAtualizada: true,
+        email: emailTrim,
+      });
     } catch (err) {
       setError(err.message || 'Erro na requisição');
     } finally {
@@ -97,14 +86,10 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           bounces={false}
         >
-          <Text style={styles.title}>Bem-vindo de volta!</Text>
-          <Text style={styles.subtitle}>Faça login para continuar</Text>
-
-          {info ? (
-            <Text style={styles.info} accessibilityRole="text" accessibilityLiveRegion="polite">
-              {info}
-            </Text>
-          ) : null}
+          <Text style={styles.title}>Esqueceu a senha?</Text>
+          <Text style={styles.subtitle}>
+            Informe o e-mail da conta e escolha uma nova senha
+          </Text>
 
           <TextField
             label="E-mail"
@@ -114,16 +99,22 @@ export default function LoginScreen() {
             keyboardType="email-address"
             icon={<MailIcon />}
           />
-          <PasswordField value={senha} onChangeText={setSenha} />
-
-          <Pressable
-            onPress={handleForgot}
-            accessibilityRole="link"
-            accessibilityLabel="Esqueceu sua senha?"
-            style={styles.forgotHit}
-          >
-            <Text style={styles.forgot}>Esqueceu sua senha?</Text>
-          </Pressable>
+          <PasswordField
+            label="Nova senha"
+            value={senha}
+            onChangeText={setSenha}
+            placeholder="Digite a nova senha"
+            autoComplete="new-password"
+            textContentType="newPassword"
+          />
+          <PasswordField
+            label="Confirmar senha"
+            value={confirmacao}
+            onChangeText={setConfirmacao}
+            placeholder="Confirme a nova senha"
+            autoComplete="new-password"
+            textContentType="newPassword"
+          />
 
           {error ? (
             <Text style={styles.alert} accessibilityRole="alert">
@@ -135,7 +126,7 @@ export default function LoginScreen() {
             onPress={handleSubmit}
             disabled={submitting}
             accessibilityRole="button"
-            accessibilityLabel="Entrar"
+            accessibilityLabel="Redefinir senha"
             accessibilityState={{ disabled: submitting, busy: submitting }}
             style={({ pressed }) => [
               styles.submit,
@@ -144,26 +135,23 @@ export default function LoginScreen() {
             ]}
           >
             {submitting ? (
-              <Text style={styles.submitText}>Entrando…</Text>
+              <Text style={styles.submitText}>Redefinindo…</Text>
             ) : (
               <View style={styles.submitContent}>
-                <LogInIcon />
-                <Text style={styles.submitText}>Entrar</Text>
+                <LockIcon color={colors.surface} />
+                <Text style={styles.submitText}>Redefinir senha</Text>
               </View>
             )}
           </Pressable>
 
-          <Text style={styles.signupHint}>
-            Ainda não tem uma conta?{' '}
-            <Text
-              onPress={() => navigation.navigate('Register')}
-              style={styles.signupLink}
-              accessibilityRole="link"
-              accessibilityLabel="Cadastre-se"
-            >
-              Cadastre-se
-            </Text>
-          </Text>
+          <Pressable
+            onPress={() => goToLogin()}
+            accessibilityRole="link"
+            accessibilityLabel="Voltar ao login"
+            style={styles.backHit}
+          >
+            <Text style={styles.backLink}>Voltar ao login</Text>
+          </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
     </AuthLayout>
@@ -192,27 +180,8 @@ const styles = StyleSheet.create({
     color: colors.muted,
     textAlign: 'center',
   },
-  info: {
-    marginBottom: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 10,
-    backgroundColor: colors.background,
-    color: colors.primary,
-    fontSize: 14,
-  },
-  forgotHit: {
-    alignSelf: 'flex-end',
-    minHeight: 44,
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  forgot: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
   alert: {
+    marginTop: 8,
     marginBottom: 12,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -222,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   submit: {
+    marginTop: 8,
     backgroundColor: colors.primary,
     borderRadius: 12,
     minHeight: 48,
@@ -244,14 +214,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
-  signupHint: {
+  backHit: {
     marginTop: 20,
-    textAlign: 'center',
-    color: colors.muted,
-    fontSize: 14,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  signupLink: {
+  backLink: {
     color: colors.primary,
+    fontSize: 14,
     fontWeight: '700',
   },
 });

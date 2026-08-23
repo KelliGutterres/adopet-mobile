@@ -55,3 +55,10 @@ export function cadastrarUsuario({ nome, email, senha, contato, cidade }) {
 export function me() {
   return requestJson('/auth/me');
 }
+
+export function redefinirSenhaUsuario({ email, senha }) {
+  return requestJson('/auth/usuarios/senha', {
+    method: 'PUT',
+    body: { email, senha },
+  });
+}

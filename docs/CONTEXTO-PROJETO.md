@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro e esqueci senha: specs seguintes.
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004).
 
 Backend (quando a fase de IA começar):
 
@@ -132,6 +132,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Cadastro de conta (dados pessoais, e-mail, senha, contato, cidade) — RF0001 parcial (spec 003)
 - [ ] Edição de conta — RF0001 parcial (spec futura / card 59)
 - [x] Login (e-mail/senha) — RF0002
+- [x] Esqueci senha (redefinir via e-mail) — RF0002 parcial (spec 004)
 - [ ] Cadastro/edição/exclusão de animais (nome, espécie, raça, idade, descrição, status, imagens) — RF0003
 - [ ] Listagem: adoção, perdidos, localizados/encontrados — RF0004
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
@@ -384,6 +385,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-22 | Mobile: login do usuário com JWT no **SecureStore**; cadastro e esqueci senha ficam para specs seguintes | Spec 002 / autora |
 | 2026-08-22 | Mobile: Expo **SDK 54** (`expo@54.0.37`), alinhado ao Expo Go da App Store (iOS) | Autora |
 | 2026-08-23 | Mobile: cadastro de usuário (spec 003) com login automático, cidade inline, senha mín. 6, máscara de telefone, sem termos/OAuth | Spec 003 / autora |
+| 2026-08-23 | Mobile: esqueci senha do usuário (spec 004) com `PUT /auth/usuarios/senha`, um form, volta ao login sem JWT; listagem passa a spec 005 | Spec 004 / autora |
 
 ---
 
@@ -398,6 +400,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Scaffold do app mobile (Expo + RN JS — spec 001)
 - [x] Login mobile do usuário (JWT + SecureStore — spec 002)
 - [x] Cadastro mobile do usuário (JWT + cidade inline + máscara de telefone — spec 003)
+- [x] Esqueci senha mobile do usuário (`PUT /auth/usuarios/senha` — spec 004)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [ ] Anexar protótipos/diagramas em `docs/` (Fig. 15 nas specs das telas; Fig. 13 anexada no mobile)
 
@@ -418,3 +421,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-22 | Login mobile (spec 002): JWT no SecureStore, tela Fig. 13; cadastro/esqueci senha fora |
 | 2026-08-22 | Mobile rebaixado para Expo SDK 54 (`54.0.37`) para abrir no Expo Go do iPhone |
 | 2026-08-23 | Cadastro mobile (spec 003): login automático, contato com máscara, cidade/UF inline; edição de perfil continua fora |
+| 2026-08-23 | Esqueci senha mobile (spec 004): um form, prefill de e-mail, volta ao login com aviso; listagem vira spec 005 |

@@ -21,12 +21,13 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 | [001](./001-estrutura-inicial-mobile.md) | Scaffold React Native (executado com Expo) | aprovada e implementada |
 | [002](./002-login-usuario.md) | Tela de login do usuário + JWT | aprovada e implementada |
 | [003](./003-cadastro-usuario.md) | Cadastro de usuário | aprovada e implementada |
-| 004 | Listagem de animais (A / P / E) | planejada (antes era 003) |
-| 005 | Detalhe do animal | planejada |
-| 006 | CRUD de animal pelo usuário | planejada |
-| 007 | Filtros de busca (RF0005) | planejada — fase 2 |
-| 008 | Perfil / editar conta | planejada — depende de API |
+| [004](./004-esqueci-senha.md) | Esqueci a senha do usuário | aprovada e implementada |
+| 005 | Listagem de animais (A / P / E) | planejada (antes era 004 nesta 003) |
+| 006 | Detalhe do animal | planejada |
+| 007 | CRUD de animal pelo usuário | planejada |
+| 008 | Filtros de busca (RF0005) | planejada — fase 2 |
+| 009 | Perfil / editar conta | planejada — depende de API |
 
-Roadmap detalhado: spec 001. Auth: login na 002, cadastro nesta 003 (card 51). Esqueci senha continua spec futura.
+Roadmap detalhado: spec 001. Auth: login na 002, cadastro na 003, esqueci senha nesta 004. Listagem A/P/E fica para a 005.
 
-A listagem saiu do número 003 porque a 002 adiou o cadastro; a autora pediu o cadastro como próxima fatia.
+A 003 tinha reservado 004 para a listagem; a autora pediu o esqueci senha como próxima fatia, então a listagem deslocou.
