@@ -8,6 +8,8 @@ export default function PasswordField({
   value,
   onChangeText,
   placeholder = 'Digite sua senha',
+  autoComplete = 'password',
+  textContentType = 'password',
 }) {
   const [visible, setVisible] = useState(false);
   const toggleLabel = visible ? 'Ocultar senha' : 'Mostrar senha';
@@ -27,8 +29,8 @@ export default function PasswordField({
           secureTextEntry={!visible}
           autoCapitalize="none"
           autoCorrect={false}
-          autoComplete="password"
-          textContentType="password"
+          autoComplete={autoComplete}
+          textContentType={textContentType}
           accessibilityLabel={label}
           style={styles.input}
         />

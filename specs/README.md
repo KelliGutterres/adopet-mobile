@@ -20,12 +20,13 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 |------|------|--------|
 | [001](./001-estrutura-inicial-mobile.md) | Scaffold React Native (executado com Expo) | aprovada e implementada |
 | [002](./002-login-usuario.md) | Tela de login do usuário + JWT | aprovada e implementada |
-| 003 | Listagem de animais (A / P / E) | planejada |
-| 004 | Detalhe do animal | planejada |
-| 005 | CRUD de animal pelo usuário | planejada |
-| 006 | Filtros de busca (RF0005) | planejada — fase 2 |
-| 007 | Perfil / editar conta | planejada — depende de API |
+| [003](./003-cadastro-usuario.md) | Cadastro de usuário | aprovada e implementada |
+| 004 | Listagem de animais (A / P / E) | planejada (antes era 003) |
+| 005 | Detalhe do animal | planejada |
+| 006 | CRUD de animal pelo usuário | planejada |
+| 007 | Filtros de busca (RF0005) | planejada — fase 2 |
+| 008 | Perfil / editar conta | planejada — depende de API |
 
-Roadmap detalhado: spec 001. Auth do usuário: spec 002.
+Roadmap detalhado: spec 001. Auth: login na 002, cadastro nesta 003 (card 51). Esqueci senha continua spec futura.
 
-Cadastro de usuário (card Trello 51) e esqueci senha **não** entram na 002 — specs seguintes.
+A listagem saiu do número 003 porque a 002 adiou o cadastro; a autora pediu o cadastro como próxima fatia.

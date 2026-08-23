@@ -129,7 +129,8 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 
 ### Mobile (usuário)
 - [x] Scaffold Expo + pastas + nav + cliente HTTP (spec 001)
-- [ ] Cadastro e edição de conta (dados pessoais, e-mail, senha) — RF0001
+- [x] Cadastro de conta (dados pessoais, e-mail, senha, contato, cidade) — RF0001 parcial (spec 003)
+- [ ] Edição de conta — RF0001 parcial (spec futura / card 59)
 - [x] Login (e-mail/senha) — RF0002
 - [ ] Cadastro/edição/exclusão de animais (nome, espécie, raça, idade, descrição, status, imagens) — RF0003
 - [ ] Listagem: adoção, perdidos, localizados/encontrados — RF0004
@@ -382,6 +383,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-22 | Mobile: React Native em **JavaScript**, executado com **Expo** (Go + emulador); **React Navigation**; template `blank`; HTTP `fetch` | Spec 001 / autora |
 | 2026-08-22 | Mobile: login do usuário com JWT no **SecureStore**; cadastro e esqueci senha ficam para specs seguintes | Spec 002 / autora |
 | 2026-08-22 | Mobile: Expo **SDK 54** (`expo@54.0.37`), alinhado ao Expo Go da App Store (iOS) | Autora |
+| 2026-08-23 | Mobile: cadastro de usuário (spec 003) com login automático, cidade inline, senha mín. 6, máscara de telefone, sem termos/OAuth | Spec 003 / autora |
 
 ---
 
@@ -395,6 +397,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] SDD + pasta `specs/` em cada repositório
 - [x] Scaffold do app mobile (Expo + RN JS — spec 001)
 - [x] Login mobile do usuário (JWT + SecureStore — spec 002)
+- [x] Cadastro mobile do usuário (JWT + cidade inline + máscara de telefone — spec 003)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [ ] Anexar protótipos/diagramas em `docs/` (Fig. 15 nas specs das telas; Fig. 13 anexada no mobile)
 
@@ -414,3 +417,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-22 | Scaffold mobile (spec 001): Expo + RN JS, React Navigation, `fetch`, pastas `src/` |
 | 2026-08-22 | Login mobile (spec 002): JWT no SecureStore, tela Fig. 13; cadastro/esqueci senha fora |
 | 2026-08-22 | Mobile rebaixado para Expo SDK 54 (`54.0.37`) para abrir no Expo Go do iPhone |
+| 2026-08-23 | Cadastro mobile (spec 003): login automático, contato com máscara, cidade/UF inline; edição de perfil continua fora |

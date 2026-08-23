@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,6 +18,7 @@ import { isEmailValid, MIN_SENHA } from '../services/authService';
 import { colors } from '../theme/colors';
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -110,10 +112,10 @@ export default function LoginScreen() {
           <Text style={styles.signupHint}>
             Ainda não tem uma conta?{' '}
             <Text
-              style={styles.signupDisabled}
-              accessibilityRole="text"
-              accessibilityState={{ disabled: true }}
-              accessibilityHint="Em breve"
+              onPress={() => navigation.navigate('Register')}
+              style={styles.signupLink}
+              accessibilityRole="link"
+              accessibilityLabel="Cadastre-se"
             >
               Cadastre-se
             </Text>
@@ -193,8 +195,8 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 14,
   },
-  signupDisabled: {
-    color: colors.placeholder,
+  signupLink: {
+    color: colors.primary,
     fontWeight: '700',
   },
 });

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { loginUsuario, me as fetchMe } from '../services/authService';
+import { cadastrarUsuario, loginUsuario, me as fetchMe } from '../services/authService';
 import {
   clearSession,
   readStoredToken,
@@ -82,6 +82,12 @@ export function AuthProvider({ children }) {
       isAuthenticated: Boolean(token),
       async login({ email, senha }) {
         const result = await loginUsuario({ email, senha });
+        await saveSession(result.token, result.usuario);
+        setToken(result.token);
+        setUsuario(result.usuario);
+      },
+      async cadastrar({ nome, email, senha, contato, cidade }) {
+        const result = await cadastrarUsuario({ nome, email, senha, contato, cidade });
         await saveSession(result.token, result.usuario);
         setToken(result.token);
         setUsuario(result.usuario);

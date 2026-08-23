@@ -10,10 +10,14 @@ export default function TextField({
   keyboardType,
   autoCapitalize = 'none',
   autoCorrect = false,
+  autoComplete = 'email',
+  textContentType = 'emailAddress',
+  maxLength,
   accessibilityLabel,
+  style,
 }) {
   return (
-    <View style={styles.field}>
+    <View style={[styles.field, style]}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrap}>
         {icon ? <View style={styles.iconLeft}>{icon}</View> : null}
@@ -25,8 +29,9 @@ export default function TextField({
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
-          autoComplete="email"
-          textContentType="emailAddress"
+          autoComplete={autoComplete}
+          textContentType={textContentType}
+          maxLength={maxLength}
           accessibilityLabel={accessibilityLabel || label}
           style={[styles.input, icon ? styles.inputWithIcon : null]}
         />
