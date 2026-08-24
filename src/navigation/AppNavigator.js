@@ -1,19 +1,34 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
-import { colors } from '../theme/colors';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AnimalListScreen from '../screens/AnimalListScreen';
+import BottomTabBar from '../components/BottomTabBar';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.surface },
-        headerTintColor: colors.primary,
-        headerTitleStyle: { fontWeight: '700' },
-      }}
+    <Tab.Navigator
+      initialRouteName="Adocao"
+      tabBar={(props) => <BottomTabBar {...props} />}
+      screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'AdoPet' }} />
-    </Stack.Navigator>
+      <Tab.Screen
+        name="Perdidos"
+        component={AnimalListScreen}
+        initialParams={{ status: 'P' }}
+        options={{ title: 'Perdidos', tabBarAccessibilityLabel: 'Perdidos' }}
+      />
+      <Tab.Screen
+        name="Encontrados"
+        component={AnimalListScreen}
+        initialParams={{ status: 'E' }}
+        options={{ title: 'Encontrados', tabBarAccessibilityLabel: 'Encontrados' }}
+      />
+      <Tab.Screen
+        name="Adocao"
+        component={AnimalListScreen}
+        initialParams={{ status: 'A' }}
+        options={{ title: 'Adoção', tabBarAccessibilityLabel: 'Adoção' }}
+      />
+    </Tab.Navigator>
   );
 }

@@ -26,8 +26,8 @@ Não commitar `.env`.
 | `npm start` / `npx expo start` | Metro + QR Code (Expo Go) |
 | `npm run android` | abre no emulador/dispositivo Android |
 
-Login com e-mail e senha (spec 002). Cadastro e esqueci senha entram em specs seguintes. Seed: `usuario@adopet.local` / `senha123`.
+Login com e-mail e senha (spec 002). Cadastro (spec 003), esqueci senha (spec 004) e listagem A/P/E (spec 005) já entram no app autenticado. Seed: `usuario@adopet.local` / `senha123`.
 
 ## Specs
 
-Ver `specs/`. Scaffold: spec 001. Login: spec 002.
+Ver `specs/`. Scaffold: spec 001. Login: spec 002. Cadastro: spec 003. Esqueci senha: spec 004. Listagem: spec 005.

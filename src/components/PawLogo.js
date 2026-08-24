@@ -1,7 +1,7 @@
 import Svg, { Circle, Path } from 'react-native-svg';
 import { colors } from '../theme/colors';
 
-export default function PawLogo({ size = 72, color = colors.primary }) {
+export default function PawLogo({ size = 72, color = colors.primary, innerColor = '#F5F3FF' }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 64 64" accessibilityElementsHidden>
       <Path
@@ -14,7 +14,7 @@ export default function PawLogo({ size = 72, color = colors.primary }) {
       <Circle cx="14.5" cy="30" r="4.6" fill={color} />
       <Circle cx="49.5" cy="30" r="4.6" fill={color} />
       <Path
-        fill="#F5F3FF"
+        fill={innerColor}
         d="M24.2 36.2c2.4-4.6 7.2-6.4 11.8-3.2 1.6 1.1 2.6 2.6 3.2 4.2.4-1.8 1.6-3.4 3.4-4.2 3.8-1.6 7.4.8 8.2 4.6.4 2-0.2 4-1.8 5.4-2.2 1.8-5.2 1.6-7.2.2-1 .8-2.2 1.4-3.6 1.6v3.2c0 1.2-.8 2.2-2 2.4h-.4c-1.2-.2-2-1.2-2-2.4v-3.4c-2.2-.6-4-2-5.2-3.8-1.6 1.4-4 1.6-5.8.2-2.4-1.8-2.8-5.4-.8-7.6z"
       />
     </Svg>
