@@ -39,11 +39,11 @@ export default function BottomTabBar({ state, navigation }) {
           return (
             <View key={item.key} style={styles.slot}>
               <Pressable
-                disabled
+                onPress={() => {
+                  navigation.getParent()?.navigate('ChooseAnimalStatus');
+                }}
                 accessibilityRole="button"
                 accessibilityLabel="Cadastrar animal"
-                accessibilityHint="Em breve"
-                accessibilityState={{ disabled: true }}
                 style={[styles.fab, { backgroundColor: fabColor }]}
               >
                 <PlusIcon color={colors.surface} size={26} />

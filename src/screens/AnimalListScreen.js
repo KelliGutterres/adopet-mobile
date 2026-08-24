@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../hooks/useAuth';
 import { listarAnimais } from '../services/animaisService';
 import { animalMatchesFilters, LIST_COPY } from '../services/animalLabels';
@@ -30,10 +31,10 @@ export default function AnimalListScreen({ route }) {
   const [error, setError] = useState('');
 
   const load = useCallback(
-    async ({ pull } = {}) => {
+    async ({ pull, silent } = {}) => {
       if (pull) {
         setRefreshing(true);
-      } else {
+      } else if (!silent) {
         setLoading(true);
       }
       setError('');
@@ -55,9 +56,11 @@ export default function AnimalListScreen({ route }) {
     [logout, status],
   );
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useFocusEffect(
+    useCallback(() => {
+      load({ silent: true });
+    }, [load]),
+  );
 
   const filtrados = useMemo(
     () => animais.filter((animal) => animalMatchesFilters(animal, { busca })),

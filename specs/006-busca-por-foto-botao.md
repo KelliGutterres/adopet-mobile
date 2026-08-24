@@ -1,4 +1,4 @@
-# Spec 010 — Botão “buscar por foto” (placeholder)
+# Spec 006 — Botão “buscar por foto” (placeholder)
 
 > **Status:** aprovada e implementada.  
 > Pontos 1–3 fechados em 2026-08-23: posição A; toque desabilitado; só ícone.  

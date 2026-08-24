@@ -83,6 +83,14 @@ export function ChevronIcon({ color = colors.placeholder, size = 18 }) {
   );
 }
 
+export function ChevronLeftIcon({ color = colors.surface, size = 22 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M15 6l-6 6 6 6" stroke={color} strokeWidth={2} {...STROKE} />
+    </Svg>
+  );
+}
+
 export function PlusIcon({ color = colors.surface, size = 26 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>

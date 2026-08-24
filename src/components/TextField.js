@@ -15,6 +15,8 @@ export default function TextField({
   maxLength,
   accessibilityLabel,
   style,
+  multiline = false,
+  numberOfLines,
 }) {
   return (
     <View style={[styles.field, style]}>
@@ -32,8 +34,15 @@ export default function TextField({
           autoComplete={autoComplete}
           textContentType={textContentType}
           maxLength={maxLength}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
+          textAlignVertical={multiline ? 'top' : 'center'}
           accessibilityLabel={accessibilityLabel || label}
-          style={[styles.input, icon ? styles.inputWithIcon : null]}
+          style={[
+            styles.input,
+            icon ? styles.inputWithIcon : null,
+            multiline ? styles.inputMultiline : null,
+          ]}
         />
       </View>
     </View>
@@ -71,5 +80,9 @@ const styles = StyleSheet.create({
   },
   inputWithIcon: {
     paddingLeft: 44,
+  },
+  inputMultiline: {
+    minHeight: 120,
+    paddingTop: 12,
   },
 });
