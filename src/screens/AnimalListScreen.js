@@ -77,7 +77,11 @@ export default function AnimalListScreen({ route }) {
         </View>
       </View>
       <View style={styles.searchWrap}>
-        <SearchBar value={busca} onChangeText={setBusca} />
+        <SearchBar
+          value={busca}
+          onChangeText={setBusca}
+          showPhotoSearch={status === 'E' || status === 'P'}
+        />
       </View>
       <FlatList
         data={loading || error ? [] : filtrados}

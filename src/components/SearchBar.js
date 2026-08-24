@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../theme/colors';
-import { FunnelIcon, SearchIcon } from './ListIcons';
+import { CameraIcon, FunnelIcon, SearchIcon } from './ListIcons';
 
-export default function SearchBar({ value, onChangeText }) {
+export default function SearchBar({ value, onChangeText, showPhotoSearch = false }) {
   return (
     <View style={styles.row}>
       <View style={styles.inputWrap}>
@@ -20,6 +20,18 @@ export default function SearchBar({ value, onChangeText }) {
           style={styles.input}
         />
       </View>
+      {showPhotoSearch ? (
+        <Pressable
+          disabled
+          accessibilityRole="button"
+          accessibilityLabel="Buscar por foto"
+          accessibilityHint="Em breve"
+          accessibilityState={{ disabled: true }}
+          style={styles.photoSearch}
+        >
+          <CameraIcon color={colors.text} size={18} />
+        </Pressable>
+      ) : null}
       <Pressable
         disabled
         accessibilityRole="button"
@@ -75,5 +87,16 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '600',
     fontSize: 13,
+  },
+  photoSearch: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    opacity: 0.7,
   },
 });

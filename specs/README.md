@@ -27,5 +27,6 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 | 007 | CRUD de animal pelo usuário | planejada |
 | 008 | Filtros de busca (RF0005) | planejada — fase 2 |
 | 009 | Perfil / editar conta | planejada — depende de API |
+| [010](./010-busca-por-foto-botao.md) | Botão buscar por foto (placeholder RF0008) | aprovada e implementada |
 
-Auth: login na 002, cadastro na 003, esqueci senha na 004. Listagem A/P/E é a 005.
+Auth: login na 002, cadastro na 003, esqueci senha na 004. Listagem A/P/E é a 005. Entrada visual de busca por foto (P/E) é a 010.

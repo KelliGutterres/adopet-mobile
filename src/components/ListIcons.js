@@ -38,6 +38,20 @@ export function FunnelIcon({ color = colors.text, size = 16 }) {
   );
 }
 
+export function CameraIcon({ color = colors.text, size = 18 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path
+        d="M4 8h3.2l1.4-2.2A2 2 0 0 1 10.3 5h3.4a2 2 0 0 1 1.7.8L16.8 8H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z"
+        stroke={color}
+        strokeWidth={1.8}
+        {...STROKE}
+      />
+      <Circle cx="12" cy="14" r="3.2" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
 export function MapPinIcon({ color = colors.muted, size = 14 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>

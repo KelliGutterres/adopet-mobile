@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Botão buscar por foto P/E (spec 010).
 
 Backend (quando a fase de IA começar):
 
@@ -138,7 +138,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
 - [ ] Detalhes do animal (fotos, descrição, localização) — RF0006
 - [ ] Upload por galeria ou câmera — RF0007
-- [ ] Comparação inteligente de imagens — RF0008
+- [ ] Comparação inteligente de imagens — RF0008 (botão placeholder nas listas P/E — spec 010; fluxo real na fase 2)
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
 
 ### Web (ONG = administrador do painel)
@@ -387,6 +387,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Mobile: cadastro de usuário (spec 003) com login automático, cidade inline, senha mín. 6, máscara de telefone, sem termos/OAuth | Spec 003 / autora |
 | 2026-08-23 | Mobile: esqueci senha do usuário (spec 004) com `PUT /auth/usuarios/senha`, um form, volta ao login sem JWT; listagem passa a spec 005 | Spec 004 / autora |
 | 2026-08-23 | Mobile: listagem A/P/E em cards (spec 005); barra Perdidos/Encontrados/+/Adoção/Perfil; Encontrados sem nome no card; sem Sair nesta fatia | Spec 005 / autora |
+| 2026-08-23 | Mobile: botão câmera “buscar por foto” só em Perdidos/Encontrados (spec 010); desabilitado; RF0008 sem aba Similaridade | Spec 010 / autora |
 
 ---
 
@@ -403,6 +404,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Cadastro mobile do usuário (JWT + cidade inline + máscara de telefone — spec 003)
 - [x] Esqueci senha mobile do usuário (`PUT /auth/usuarios/senha` — spec 004)
 - [x] Listagem mobile A/P/E (spec 005)
+- [x] Botão buscar por foto placeholder em P/E (spec 010)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -425,3 +427,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Cadastro mobile (spec 003): login automático, contato com máscara, cidade/UF inline; edição de perfil continua fora |
 | 2026-08-23 | Esqueci senha mobile (spec 004): um form, prefill de e-mail, volta ao login com aviso; listagem vira spec 005 |
 | 2026-08-23 | Listagem mobile (spec 005): três abas A/P/E, cards do print, busca no cliente; Perfil/FAB/sino sem ação; sem Sair |
+| 2026-08-23 | Botão buscar por foto (spec 010): ícone câmera em P/E, desabilitado; sem aba Similaridade; RF0008 continua fase 2 |
