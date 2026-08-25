@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, statusTheme } from '../theme/colors';
 import {
   iniciaisNome,
@@ -22,7 +22,7 @@ function Chip({ label, backgroundColor, color }) {
   );
 }
 
-export default function AnimalCard({ animal }) {
+export default function AnimalCard({ animal, onPress }) {
   const status = animal.status === 'A' || animal.status === 'P' ? animal.status : 'E';
   const theme = statusTheme[status];
   const isAdocao = status === 'A';
@@ -31,12 +31,16 @@ export default function AnimalCard({ animal }) {
   const traits = isAdocao ? linhaCaracteristicas(animal) : '';
   const especie = labelEspecie(animal.especie);
   const porte = labelPorte(animal.porte);
+  const accessibilityLabel = [title, contextLine, traits, especie, porte].filter(Boolean).join(', ');
 
   return (
-    <View
-      style={styles.card}
-      accessibilityRole="text"
-      accessibilityLabel={[title, contextLine, traits, especie, porte].filter(Boolean).join(', ')}
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint="Ver detalhes"
+      android_ripple={{ color: colors.border }}
+      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={[styles.photo, { backgroundColor: theme.chipBg }]}>
         <Text style={[styles.initials, { color: theme.primary }]}>{iniciaisNome(animal.nome)}</Text>
@@ -69,7 +73,7 @@ export default function AnimalCard({ animal }) {
       <View style={styles.chevron} accessibilityElementsHidden>
         <ChevronIcon />
       </View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -83,6 +87,10 @@ const styles = StyleSheet.create({
     gap: 12,
     borderWidth: 1,
     borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  cardPressed: {
+    opacity: 0.85,
   },
   photo: {
     width: 72,

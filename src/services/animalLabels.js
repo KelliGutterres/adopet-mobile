@@ -67,6 +67,16 @@ export function linhaCaracteristicas(animal) {
   return [labelIdade(animal?.idade), labelPorte(animal?.porte)].filter(Boolean).join(' • ');
 }
 
+const STATUS_LABELS = {
+  A: 'Para adoção',
+  P: 'Perdido',
+  E: 'Encontrado',
+};
+
+export function labelStatus(status) {
+  return STATUS_LABELS[status] || '';
+}
+
 export function tituloCard(animal) {
   if (animal?.status === 'E') {
     if (animal.especie === 'GATO') {
@@ -78,6 +88,20 @@ export function tituloCard(animal) {
     return 'Animal encontrado';
   }
   return (animal?.nome || '').trim() || 'Animal';
+}
+
+export function labelResponsavel(animal) {
+  if (animal?.status === 'A') {
+    return {
+      label: 'ONG responsável',
+      value: animal?.instituicao?.nome || animal?.usuario?.nome || '',
+    };
+  }
+
+  return {
+    label: 'Cadastrado por',
+    value: animal?.usuario?.nome || animal?.instituicao?.nome || '',
+  };
 }
 
 export function iniciaisNome(nome) {

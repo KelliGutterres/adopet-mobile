@@ -18,3 +18,21 @@ export async function criarAnimal(body) {
   });
   return data?.animal ?? null;
 }
+
+export function parseIdAnimal(id) {
+  const n = Number(id);
+  if (!Number.isInteger(n) || n <= 0) {
+    return null;
+  }
+  return n;
+}
+
+export async function buscarAnimal(id) {
+  const idAnimal = parseIdAnimal(id);
+  if (!idAnimal) {
+    throw new ApiError('id inválido', 400);
+  }
+
+  const data = await requestJson(`/animais/${idAnimal}`);
+  return data?.animal ?? null;
+}

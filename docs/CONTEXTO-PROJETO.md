@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Botão buscar por foto P/E (spec 010).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Botão buscar por foto P/E (spec 006).
 
 Backend (quando a fase de IA começar):
 
@@ -136,7 +136,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão e adoção (ONG/web) — RF0003 parcial
 - [x] Listagem: adoção, perdidos, localizados/encontrados — RF0004 (spec 005)
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
-- [ ] Detalhes do animal (fotos, descrição, localização) — RF0006
+- [x] Detalhes do animal (descrição, localização; foto placeholder — spec 008) — RF0006
 - [ ] Upload por galeria ou câmera — RF0007
 - [ ] Comparação inteligente de imagens — RF0008 (botão placeholder nas listas P/E — spec 010; fluxo real na fase 2)
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
@@ -328,7 +328,7 @@ Critério de pronto: [comportamento verificável]
 - Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `context` / `theme`.
 - Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
 - Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL`.
-- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E na área logada, specs 005 e 007).
+- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E e detalhe na área logada, specs 005, 007 e 008).
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
 - Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
 - Loading, empty state e erro em listas (nas specs de listagem).
@@ -389,6 +389,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Mobile: listagem A/P/E em cards (spec 005); barra Perdidos/Encontrados/+/Adoção/Perfil; Encontrados sem nome no card; sem Sair nesta fatia | Spec 005 / autora |
 | 2026-08-23 | Mobile: botão câmera “buscar por foto” só em Perdidos/Encontrados (spec 010); desabilitado; RF0008 sem aba Similaridade | Spec 010 / autora |
 | 2026-08-23 | Mobile: usuário cadastra só P/E (spec 007); tela Encontrei/Perdi após o FAB; adoção só a ONG no web; backend intocado | Spec 007 / autora |
+| 2026-08-24 | Mobile: detalhe do animal é a spec **008** (não a 006); uma tela para A/P/E; `GET /animais/:id`; só leitura; filtros RF0005 deixam o número 008 | Spec 008 / autora |
 
 ---
 
@@ -407,6 +408,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Listagem mobile A/P/E (spec 005)
 - [x] Botão buscar por foto placeholder em P/E (spec 010)
 - [x] Cadastro mobile de animal perdido/encontrado (spec 007)
+- [x] Detalhe mobile A/P/E (spec 008)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -431,3 +433,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Listagem mobile (spec 005): três abas A/P/E, cards do print, busca no cliente; Perfil/FAB/sino sem ação; sem Sair |
 | 2026-08-23 | Botão buscar por foto (spec 010): ícone câmera em P/E, desabilitado; sem aba Similaridade; RF0008 continua fase 2 |
 | 2026-08-23 | Cadastro mobile P/E (spec 007): FAB → tela Encontrei/Perdi → form; sem adoção no app; cidade da sessão |
+| 2026-08-24 | Spec 008 (detalhe A/P/E): toque no card → `GET /animais/:id`; uma tela para as três listas; só leitura |

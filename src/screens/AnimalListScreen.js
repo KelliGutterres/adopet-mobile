@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useAuth } from '../hooks/useAuth';
 import { listarAnimais } from '../services/animaisService';
 import { animalMatchesFilters, LIST_COPY } from '../services/animalLabels';
@@ -19,6 +19,7 @@ import AppHeader from '../components/AppHeader';
 import SearchBar from '../components/SearchBar';
 
 export default function AnimalListScreen({ route }) {
+  const navigation = useNavigation();
   const status = route?.params?.status || 'A';
   const theme = statusTheme[status] || statusTheme.A;
   const copy = LIST_COPY[status] || LIST_COPY.A;
@@ -89,7 +90,17 @@ export default function AnimalListScreen({ route }) {
       <FlatList
         data={loading || error ? [] : filtrados}
         keyExtractor={(item) => String(item.idAnimal)}
-        renderItem={({ item }) => <AnimalCard animal={item} />}
+        renderItem={({ item }) => (
+          <AnimalCard
+            animal={item}
+            onPress={() =>
+              navigation.navigate('AnimalDetail', {
+                idAnimal: item.idAnimal,
+                status: item.status,
+              })
+            }
+          />
+        )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={[styles.list, empty ? styles.listGrow : null]}
         keyboardShouldPersistTaps="handled"
