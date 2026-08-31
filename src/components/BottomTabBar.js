@@ -6,7 +6,7 @@ import {
   HeartIcon,
   LostTabIcon,
   PlusIcon,
-  ProfileTabIcon,
+  SimilarityTabIcon,
 } from './ListIcons';
 
 const ITEMS = [
@@ -14,7 +14,7 @@ const ITEMS = [
   { key: 'Encontrados', label: 'Encontrados', Icon: FoundTabIcon },
   { key: 'Cadastrar', label: 'Cadastrar', fab: true },
   { key: 'Adocao', label: 'Adoção', Icon: HeartIcon },
-  { key: 'Perfil', label: 'Perfil', Icon: ProfileTabIcon, disabled: true },
+  { key: 'Similaridade', label: 'Similaridade', Icon: SimilarityTabIcon, disabled: true },
 ];
 
 function themeForRoute(routeName) {
@@ -65,7 +65,9 @@ export default function BottomTabBar({ state, navigation }) {
               style={styles.slot}
             >
               <item.Icon color={colors.placeholder} size={22} />
-              <Text style={[styles.label, styles.labelDisabled]}>{item.label}</Text>
+              <Text style={[styles.label, styles.labelDisabled]} numberOfLines={1}>
+                {item.label}
+              </Text>
             </Pressable>
           );
         }
@@ -97,7 +99,9 @@ export default function BottomTabBar({ state, navigation }) {
             style={styles.slot}
           >
             <item.Icon color={color} size={22} />
-            <Text style={[styles.label, { color }]}>{item.label}</Text>
+            <Text style={[styles.label, { color }]} numberOfLines={1}>
+              {item.label}
+            </Text>
           </Pressable>
         );
       })}
@@ -125,8 +129,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   label: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
+    textAlign: 'center',
   },
   labelDisabled: {
     color: colors.placeholder,

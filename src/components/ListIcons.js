@@ -133,3 +133,35 @@ export function ProfileTabIcon({ color = colors.muted, size = 22 }) {
     </Svg>
   );
 }
+
+export function SimilarityTabIcon({ color = colors.muted, size = 22 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Circle cx="9" cy="12" r="5.2" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Circle cx="15" cy="12" r="5.2" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
+export function PencilIcon({ color = colors.surface, size = 22 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path
+        d="M12.5 6.5l5 5M4 20l1.2-4.2L16.7 4.3a2 2 0 0 1 2.8 0l.2.2a2 2 0 0 1 0 2.8L8.2 18.8 4 20z"
+        stroke={color}
+        strokeWidth={1.8}
+        {...STROKE}
+      />
+    </Svg>
+  );
+}
+
+export function LogoutIcon({ color = colors.danger, size = 22 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M10 17l5-5-5-5" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M15 12H4" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M20 4v16" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
