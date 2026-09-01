@@ -36,3 +36,40 @@ export async function buscarAnimal(id) {
   const data = await requestJson(`/animais/${idAnimal}`);
   return data?.animal ?? null;
 }
+
+export function idDonoAnimal(animal) {
+  return animal?.idUsuario ?? animal?.usuario?.idUsuario ?? null;
+}
+
+export function isAnimalDoUsuario(animal, idUsuario) {
+  const dono = Number(idDonoAnimal(animal));
+  const id = Number(idUsuario);
+  if (!Number.isInteger(dono) || !Number.isInteger(id) || dono <= 0 || id <= 0) {
+    return false;
+  }
+  return dono === id;
+}
+
+export async function atualizarAnimal(id, body) {
+  const idAnimal = parseIdAnimal(id);
+  if (!idAnimal) {
+    throw new ApiError('id inválido', 400);
+  }
+
+  const data = await requestJson(`/animais/${idAnimal}`, {
+    method: 'PATCH',
+    body,
+  });
+  return data?.animal ?? null;
+}
+
+export async function excluirAnimal(id) {
+  const idAnimal = parseIdAnimal(id);
+  if (!idAnimal) {
+    throw new ApiError('id inválido', 400);
+  }
+
+  await requestJson(`/animais/${idAnimal}`, {
+    method: 'DELETE',
+  });
+}

@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,10 +9,16 @@ import {
   View,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../hooks/useAuth';
-import { buscarAnimal, parseIdAnimal } from '../services/animaisService';
+import {
+  buscarAnimal,
+  excluirAnimal,
+  isAnimalDoUsuario,
+  parseIdAnimal,
+} from '../services/animaisService';
+import { isStatusPermitido } from '../services/animalForm';
 import {
   iniciaisNome,
   labelCidade,
@@ -22,7 +29,7 @@ import {
   labelStatus,
   tituloCard,
 } from '../services/animalLabels';
-import { ChevronLeftIcon, MapPinIcon } from '../components/ListIcons';
+import { ChevronLeftIcon, MapPinIcon, PencilIcon, TrashIcon } from '../components/ListIcons';
 import { colors, statusTheme } from '../theme/colors';
 
 function Chip({ label, backgroundColor, color }) {
@@ -59,61 +66,125 @@ export default function AnimalDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const insets = useSafeAreaInsets();
-  const { logout } = useAuth();
+  const { usuario, logout } = useAuth();
 
   const idAnimal = parseIdAnimal(route?.params?.idAnimal);
   const statusHint = themeStatus(route?.params?.status);
+  const fromMyAnimals = route?.params?.from === 'MyAnimals';
 
   const [animal, setAnimal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [canRetry, setCanRetry] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const status = themeStatus(animal?.status) || statusHint;
   const theme = (status && statusTheme[status]) || statusTheme.A;
   const headerColor = status ? theme.primary : colors.muted;
+  const canManage =
+    fromMyAnimals &&
+    Boolean(animal) &&
+    isStatusPermitido(animal.status) &&
+    isAnimalDoUsuario(animal, usuario?.idUsuario);
+  const headerWide = fromMyAnimals;
 
-  const load = useCallback(async () => {
-    if (!idAnimal) {
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setCanRetry(false);
-    try {
-      const data = await buscarAnimal(idAnimal);
-      if (!data) {
-        setAnimal(null);
-        setError('Animal não encontrado.');
+  const load = useCallback(
+    async ({ silent } = {}) => {
+      if (!idAnimal) {
         return;
       }
-      setAnimal(data);
+
+      if (!silent) {
+        setLoading(true);
+      }
+      setError('');
+      setCanRetry(false);
+      try {
+        const data = await buscarAnimal(idAnimal);
+        if (!data) {
+          setAnimal(null);
+          setError('Animal não encontrado.');
+          return;
+        }
+        setAnimal(data);
+      } catch (err) {
+        if (err.status === 401) {
+          await logout();
+          return;
+        }
+        setAnimal(null);
+        if (err.status === 404 || err.status === 400) {
+          setError(err.status === 404 ? 'Animal não encontrado.' : err.message || 'id inválido');
+          setCanRetry(false);
+        } else {
+          setError(err.message || 'Erro na requisição');
+          setCanRetry(true);
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [idAnimal, logout],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!idAnimal) {
+        navigation.goBack();
+        return;
+      }
+      load({ silent: true });
+    }, [idAnimal, load, navigation]),
+  );
+
+  function handleEdit() {
+    if (!canManage || deleting) {
+      return;
+    }
+    navigation.navigate('AnimalForm', {
+      idAnimal: animal.idAnimal,
+      status: animal.status,
+    });
+  }
+
+  function handleDelete() {
+    if (!canManage || deleting) {
+      return;
+    }
+    const nome = (animal?.nome || '').trim() || 'animal';
+    Alert.alert(
+      'Excluir animal',
+      `Excluir ${nome}? Esta ação não pode ser desfeita.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: confirmDelete,
+        },
+      ],
+    );
+  }
+
+  async function confirmDelete() {
+    if (deleting) {
+      return;
+    }
+    setDeleting(true);
+    setError('');
+    try {
+      await excluirAnimal(animal.idAnimal);
+      navigation.navigate('MyAnimals');
     } catch (err) {
       if (err.status === 401) {
         await logout();
         return;
       }
-      setAnimal(null);
-      if (err.status === 404 || err.status === 400) {
-        setError(err.status === 404 ? 'Animal não encontrado.' : err.message || 'id inválido');
-        setCanRetry(false);
-      } else {
-        setError(err.message || 'Erro na requisição');
-        setCanRetry(true);
-      }
+      Alert.alert('Não foi possível excluir', err.message || 'Erro na requisição');
     } finally {
-      setLoading(false);
+      setDeleting(false);
     }
-  }, [idAnimal, logout]);
-
-  useEffect(() => {
-    if (!idAnimal) {
-      navigation.goBack();
-      return;
-    }
-    load();
-  }, [idAnimal, load, navigation]);
+  }
 
   if (!idAnimal) {
     return null;
@@ -136,18 +207,51 @@ export default function AnimalDetailScreen() {
       <StatusBar style="light" />
       <View style={[styles.top, { backgroundColor: headerColor, paddingTop: insets.top + 4 }]}>
         <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}
-            accessibilityRole="button"
-            accessibilityLabel="Voltar"
-            style={styles.back}
-          >
-            <ChevronLeftIcon color={colors.surface} size={22} />
-          </Pressable>
+          <View style={[styles.headerSide, headerWide ? styles.headerSideWide : null]}>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              accessibilityRole="button"
+              accessibilityLabel="Voltar"
+              style={styles.back}
+            >
+              <ChevronLeftIcon color={colors.surface} size={22} />
+            </Pressable>
+            {headerWide ? <View style={styles.back} /> : null}
+          </View>
           <Text style={styles.headerTitle} numberOfLines={1}>
             Detalhes
           </Text>
-          <View style={styles.back} />
+          <View style={[styles.headerSide, headerWide ? styles.headerSideWide : null]}>
+            {canManage ? (
+              <>
+                <Pressable
+                  onPress={handleEdit}
+                  disabled={deleting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Editar animal"
+                  accessibilityState={{ disabled: deleting }}
+                  style={styles.back}
+                >
+                  <PencilIcon color={colors.surface} size={22} />
+                </Pressable>
+                <Pressable
+                  onPress={handleDelete}
+                  disabled={deleting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Excluir animal"
+                  accessibilityState={{ disabled: deleting, busy: deleting }}
+                  style={styles.back}
+                >
+                  <TrashIcon color={colors.danger} size={22} />
+                </Pressable>
+              </>
+            ) : (
+              <>
+                <View style={styles.back} />
+                {headerWide ? <View style={styles.back} /> : null}
+              </>
+            )}
+          </View>
         </View>
       </View>
 
@@ -269,6 +373,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 8,
     minHeight: 52,
+  },
+  headerSide: {
+    width: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerSideWide: {
+    width: 88,
   },
   back: {
     width: 44,

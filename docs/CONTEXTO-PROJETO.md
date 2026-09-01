@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Botão buscar por foto P/E (spec 006).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006).
 
 Backend (quando a fase de IA começar):
 
@@ -134,7 +134,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Edição de conta (nome, e-mail, contato, cidade; sem senha) — RF0001 (spec 010)
 - [x] Login (e-mail/senha) — RF0002
 - [x] Esqueci senha (redefinir via e-mail) — RF0002 parcial (spec 004)
-- [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão e adoção (ONG/web) — RF0003 parcial
+- [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão dos próprios P/E (spec 011); adoção (ONG/web) — RF0003
 - [x] Listagem: adoção, perdidos, localizados/encontrados — RF0004 (spec 005)
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
 - [x] Detalhes do animal (descrição, localização; foto placeholder — spec 008) — RF0006
@@ -329,7 +329,7 @@ Critério de pronto: [comportamento verificável]
 - Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `context` / `theme`.
 - Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
 - Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL`.
-- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E, detalhe e perfil na área logada, specs 005, 007, 008 e 009).
+- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E, detalhe, perfil e Meus animais na área logada, specs 005, 007, 008, 009 e 011).
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
 - Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
 - Loading, empty state e erro em listas (nas specs de listagem).
@@ -393,6 +393,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-24 | Mobile: detalhe do animal é a spec **008** (não a 006); uma tela para A/P/E; `GET /animais/:id`; só leitura; filtros RF0005 deixam o número 008 | Spec 008 / autora |
 | 2026-08-31 | Mobile: perfil no header (avatar + tela de consulta); logout imediato; lápis “Em breve”; aba Similaridade no lugar de Perfil (spec 009). Edição persistida continua fora (sem PUT na API) | Spec 009 / autora |
 | 2026-08-31 | Mobile: edição de perfil na mesma tela (spec 010); `PATCH /usuarios/me`; prefill da sessão; Alert se descartar dirty; sem GET extra; senha continua no esqueci (004) | Spec 010 / autora |
+| 2026-08-31 | Mobile: Meus animais no Perfil (spec 011); `GET /animais` filtrado por `idUsuario`; editar/excluir só no detalhe dessa jornada; `PATCH` sem `status`; listas públicas só leitura | Spec 011 / autora |
 
 ---
 
@@ -414,6 +415,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Detalhe mobile A/P/E (spec 008)
 - [x] Perfil mobile (consulta + logout + aba Similaridade — spec 009)
 - [x] Edição de perfil mobile (`PATCH /usuarios/me` — spec 010)
+- [x] Meus animais mobile (listar / editar / excluir P/E — spec 011)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -441,3 +443,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-24 | Spec 008 (detalhe A/P/E): toque no card → `GET /animais/:id`; uma tela para as três listas; só leitura |
 | 2026-08-31 | Spec 009: avatar no header das listas; tela Perfil (consulta da sessão); logout imediato; lápis “Em breve”; aba Similaridade placeholder |
 | 2026-08-31 | Spec 010: edição de perfil na mesma tela; PATCH `/usuarios/me`; sessão atualizada sem novo JWT; Alert ao descartar dirty |
+| 2026-08-31 | Spec 011: Meus animais no Perfil; listar/editar/excluir P/E do usuário; detalhe com lápis/lixeira só nessa jornada |

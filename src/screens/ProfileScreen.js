@@ -28,7 +28,7 @@ import {
 } from '../services/userLabels';
 import TextField from '../components/TextField';
 import { MailIcon, MapPinIcon, PhoneIcon, UserIcon } from '../components/AuthIcons';
-import { ChevronLeftIcon, LogoutIcon, PencilIcon } from '../components/ListIcons';
+import { ChevronLeftIcon, ChevronIcon, LogoutIcon, PencilIcon } from '../components/ListIcons';
 import { colors } from '../theme/colors';
 
 function InfoRow({ label, value }) {
@@ -364,13 +364,25 @@ export default function ProfileScreen() {
               </Pressable>
             </View>
           ) : (
-            <View style={styles.card}>
-              <Text style={styles.section}>Informações</Text>
-              <InfoRow label="Nome" value={nome || nomeExibicao} />
-              <InfoRow label="E-mail" value={email} />
-              <InfoRow label="Contato" value={contato} />
-              <InfoRow label="Cidade" value={cidade} />
-            </View>
+            <>
+              <View style={styles.card}>
+                <Text style={styles.section}>Informações</Text>
+                <InfoRow label="Nome" value={nome || nomeExibicao} />
+                <InfoRow label="E-mail" value={email} />
+                <InfoRow label="Contato" value={contato} />
+                <InfoRow label="Cidade" value={cidade} />
+              </View>
+              <Pressable
+                onPress={() => navigation.navigate('MyAnimals')}
+                accessibilityRole="button"
+                accessibilityLabel="Meus animais"
+                accessibilityHint="Ver animais que você cadastrou"
+                style={({ pressed }) => [styles.actionRow, pressed && styles.actionRowPressed]}
+              >
+                <Text style={styles.actionRowLabel}>Meus animais</Text>
+                <ChevronIcon color={colors.placeholder} size={18} />
+              </Pressable>
+            </>
           )}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -478,6 +490,26 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
+    color: colors.text,
+  },
+  actionRow: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    minHeight: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  actionRowPressed: {
+    opacity: 0.85,
+  },
+  actionRowLabel: {
+    fontSize: 16,
+    fontWeight: '700',
     color: colors.text,
   },
   row: {

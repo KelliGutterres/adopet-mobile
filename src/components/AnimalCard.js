@@ -5,6 +5,7 @@ import {
   labelCidade,
   labelEspecie,
   labelPorte,
+  labelStatus,
   labelTutorAdocao,
   linhaCaracteristicas,
   tituloCard,
@@ -22,16 +23,20 @@ function Chip({ label, backgroundColor, color }) {
   );
 }
 
-export default function AnimalCard({ animal, onPress }) {
+export default function AnimalCard({ animal, onPress, showNome = false, showStatus = false }) {
   const status = animal.status === 'A' || animal.status === 'P' ? animal.status : 'E';
   const theme = statusTheme[status];
   const isAdocao = status === 'A';
-  const title = tituloCard(animal);
+  const nome = (animal.nome || '').trim();
+  const title = showNome ? nome || tituloCard(animal) : tituloCard(animal);
   const contextLine = isAdocao ? labelTutorAdocao(animal) : labelCidade(animal.cidade);
   const traits = isAdocao ? linhaCaracteristicas(animal) : '';
   const especie = labelEspecie(animal.especie);
   const porte = labelPorte(animal.porte);
-  const accessibilityLabel = [title, contextLine, traits, especie, porte].filter(Boolean).join(', ');
+  const situacao = showStatus ? labelStatus(animal.status) : '';
+  const accessibilityLabel = [title, situacao, contextLine, traits, especie, porte]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <Pressable
@@ -66,6 +71,9 @@ export default function AnimalCard({ animal, onPress }) {
           </View>
         ) : null}
         <View style={styles.chips}>
+          {situacao ? (
+            <Chip label={situacao} backgroundColor={theme.chipBg} color={theme.chipText} />
+          ) : null}
           <Chip label={especie} backgroundColor={theme.chipBg} color={theme.chipText} />
           <Chip label={porte} backgroundColor={colors.chipPorteBg} color={colors.chipPorteText} />
         </View>

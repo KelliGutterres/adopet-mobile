@@ -156,6 +156,17 @@ export function PencilIcon({ color = colors.surface, size = 22 }) {
   );
 }
 
+export function TrashIcon({ color = colors.danger, size = 22 }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
+      <Path d="M4 7h16" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke={color} strokeWidth={1.8} {...STROKE} />
+      <Path d="M10 11v6M14 11v6" stroke={color} strokeWidth={1.8} {...STROKE} />
+    </Svg>
+  );
+}
+
 export function LogoutIcon({ color = colors.danger, size = 22 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>

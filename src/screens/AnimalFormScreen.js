@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -15,7 +17,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextField from '../components/TextField';
 import { ChevronLeftIcon } from '../components/ListIcons';
 import { useAuth } from '../hooks/useAuth';
-import { criarAnimal } from '../services/animaisService';
+import {
+  atualizarAnimal,
+  buscarAnimal,
+  criarAnimal,
+  isAnimalDoUsuario,
+  parseIdAnimal,
+} from '../services/animaisService';
 import {
   ESPECIE_OPTIONS,
   FORM_COPY,
@@ -23,6 +31,8 @@ import {
   PORTE_OPTIONS,
   buildAnimalBody,
   emptyAnimalForm,
+  formFromAnimal,
+  isAnimalFormDirty,
   isStatusPermitido,
   labelIdadeOpcao,
   validateAnimalForm,
@@ -67,15 +77,34 @@ export default function AnimalFormScreen() {
   const route = useRoute();
   const insets = useSafeAreaInsets();
   const { usuario, logout } = useAuth();
-  const status = route?.params?.status;
-  const allowed = isStatusPermitido(status);
-  const theme = statusTheme[status] || statusTheme.E;
-  const copy = FORM_COPY[status] || FORM_COPY.E;
 
+  const idAnimal = parseIdAnimal(route?.params?.idAnimal);
+  const isEdit = Boolean(idAnimal);
+  const statusParam = route?.params?.status;
+
+  const [animalStatus, setAnimalStatus] = useState(
+    isStatusPermitido(statusParam) ? statusParam : null,
+  );
   const [form, setForm] = useState(() => emptyAnimalForm(usuario));
+  const [snapshot, setSnapshot] = useState(() => emptyAnimalForm(usuario));
+  const [animalNome, setAnimalNome] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(isEdit);
+  const [loaded, setLoaded] = useState(!isEdit);
   const [idadeOpen, setIdadeOpen] = useState(false);
+
+  const allowLeaveRef = useRef(false);
+  const dirtyRef = useRef(false);
+
+  const status = animalStatus || (isStatusPermitido(statusParam) ? statusParam : null);
+  const theme = (isStatusPermitido(status) && statusTheme[status]) || statusTheme.E;
+  const copy = FORM_COPY[status] || FORM_COPY.E;
+  const dirty = useMemo(
+    () => isEdit && isAnimalFormDirty(form, snapshot),
+    [isEdit, form, snapshot],
+  );
+  dirtyRef.current = dirty;
 
   const idadeOptions = useMemo(
     () => Array.from({ length: IDADE_MAX + 1 }, (_, idade) => idade),
@@ -83,10 +112,100 @@ export default function AnimalFormScreen() {
   );
 
   useEffect(() => {
-    if (!allowed) {
+    if (!isEdit && !isStatusPermitido(statusParam)) {
       navigation.replace('ChooseAnimalStatus');
     }
-  }, [allowed, navigation]);
+  }, [isEdit, statusParam, navigation]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setError('');
+      try {
+        const animal = await buscarAnimal(idAnimal);
+        if (cancelled) {
+          return;
+        }
+        if (
+          !animal ||
+          !isStatusPermitido(animal.status) ||
+          !isAnimalDoUsuario(animal, usuario?.idUsuario)
+        ) {
+          setError('Animal não encontrado.');
+          setLoaded(false);
+          return;
+        }
+        const next = formFromAnimal(animal);
+        setForm(next);
+        setSnapshot(next);
+        setAnimalNome((animal.nome || '').trim());
+        setAnimalStatus(animal.status);
+        setLoaded(true);
+      } catch (err) {
+        if (cancelled) {
+          return;
+        }
+        if (err.status === 401) {
+          await logout();
+          return;
+        }
+        setError(err.status === 404 ? 'Animal não encontrado.' : err.message || 'Erro na requisição');
+        setLoaded(false);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [idAnimal, isEdit, logout, usuario?.idUsuario]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      return undefined;
+    }
+    return navigation.addListener('beforeRemove', (event) => {
+      if (allowLeaveRef.current || submitting) {
+        if (submitting && !allowLeaveRef.current) {
+          event.preventDefault();
+        }
+        return;
+      }
+      if (!dirtyRef.current) {
+        return;
+      }
+      event.preventDefault();
+      Alert.alert(
+        'Descartar alterações?',
+        'As alterações não salvas serão perdidas.',
+        [
+          { text: 'Continuar editando', style: 'cancel' },
+          {
+            text: 'Descartar',
+            style: 'destructive',
+            onPress: () => {
+              allowLeaveRef.current = true;
+              navigation.dispatch(event.data.action);
+            },
+          },
+        ],
+      );
+    });
+  }, [isEdit, navigation, submitting]);
+
+  const leave = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   function updateField(key) {
     return (value) => {
@@ -109,7 +228,37 @@ export default function AnimalFormScreen() {
       return;
     }
 
-    const body = buildAnimalBody(form, status);
+    if (isEdit) {
+      if (!dirty) {
+        allowLeaveRef.current = true;
+        leave();
+        return;
+      }
+
+      const body = buildAnimalBody(form);
+      if (!body) {
+        setError('Não foi possível salvar');
+        return;
+      }
+
+      setSubmitting(true);
+      try {
+        await atualizarAnimal(idAnimal, body);
+        allowLeaveRef.current = true;
+        leave();
+      } catch (err) {
+        if (err.status === 401) {
+          await logout();
+          return;
+        }
+        setError(err.message || 'Erro na requisição');
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    const body = buildAnimalBody(form, statusParam);
     if (!body) {
       navigation.replace('ChooseAnimalStatus');
       return;
@@ -130,7 +279,7 @@ export default function AnimalFormScreen() {
                   { name: 'Encontrados' },
                   { name: 'Adocao' },
                 ],
-                index: status === 'P' ? 0 : 1,
+                index: statusParam === 'P' ? 0 : 1,
               },
             },
           ],
@@ -147,11 +296,17 @@ export default function AnimalFormScreen() {
     }
   }
 
-  if (!allowed) {
+  if (!isEdit && !isStatusPermitido(statusParam)) {
     return null;
   }
 
   const idadeLabel = form.idade === '' ? 'Selecione' : labelIdadeOpcao(form.idade);
+  const title = isEdit ? 'Editar animal' : copy.title;
+  const subtitle = isEdit
+    ? loading
+      ? 'Carregando animal…'
+      : `Atualize os dados de ${animalNome || 'animal'}.`
+    : copy.subtitle;
 
   return (
     <View style={styles.screen}>
@@ -167,162 +322,185 @@ export default function AnimalFormScreen() {
             <ChevronLeftIcon color={colors.surface} size={22} />
           </Pressable>
           <Text style={styles.headerTitle} numberOfLines={1}>
-            {copy.title}
+            {title}
           </Text>
           <View style={styles.back} />
         </View>
-        <Text style={styles.headerSubtitle}>{copy.subtitle}</Text>
+        <Text style={styles.headerSubtitle}>{subtitle}</Text>
       </View>
 
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <ScrollView
+      {isEdit && loading ? (
+        <View style={styles.state} accessibilityLiveRegion="polite">
+          <ActivityIndicator color={theme.primary} size="large" />
+          <Text style={styles.stateText}>Carregando animal…</Text>
+        </View>
+      ) : isEdit && !loaded ? (
+        <View style={styles.state}>
+          <Text style={styles.alert}>{error || 'Animal não encontrado.'}</Text>
+          <Pressable
+            onPress={leave}
+            accessibilityRole="button"
+            accessibilityLabel="Voltar à lista"
+            style={({ pressed }) => [
+              styles.submit,
+              { backgroundColor: theme.primary, alignSelf: 'stretch', marginHorizontal: 32 },
+              pressed && styles.submitPressed,
+            ]}
+          >
+            <Text style={styles.submitText}>Voltar à lista</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <KeyboardAvoidingView
           style={styles.flex}
-          contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom, 16) + 16 }]}
-          keyboardShouldPersistTaps="handled"
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <View style={styles.card}>
-            <Text style={styles.section}>Informações básicas</Text>
+          <ScrollView
+            style={styles.flex}
+            contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom, 16) + 16 }]}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={styles.card}>
+              <Text style={styles.section}>Informações básicas</Text>
 
-            <TextField
-              label="Nome do animal *"
-              value={form.nome}
-              onChangeText={updateField('nome')}
-              placeholder={copy.nomePlaceholder}
-              autoCapitalize="words"
-              autoComplete="off"
-              textContentType="none"
-              maxLength={80}
-              accessibilityLabel="Nome do animal"
-            />
-
-            <ChipGroup
-              label="Espécie"
-              required
-              options={ESPECIE_OPTIONS}
-              value={form.especie}
-              onChange={updateField('especie')}
-              accent={theme.primary}
-            />
-
-            <TextField
-              label="Raça *"
-              value={form.raca}
-              onChangeText={updateField('raca')}
-              placeholder="Ex: SRD, Labrador"
-              autoCapitalize="words"
-              autoComplete="off"
-              textContentType="none"
-              maxLength={60}
-              accessibilityLabel="Raça"
-            />
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Idade</Text>
-              <Pressable
-                onPress={() => setIdadeOpen(true)}
-                accessibilityRole="button"
-                accessibilityLabel={`Idade, ${idadeLabel}`}
-                style={styles.select}
-              >
-                <Text style={[styles.selectText, form.idade === '' && styles.selectPlaceholder]}>
-                  {idadeLabel}
-                </Text>
-              </Pressable>
-            </View>
-
-            <ChipGroup
-              label="Porte"
-              required
-              options={PORTE_OPTIONS}
-              value={form.porte}
-              onChange={updateField('porte')}
-              accent={theme.primary}
-            />
-
-            <TextField
-              label="Descrição *"
-              value={form.descricao}
-              onChangeText={updateField('descricao')}
-              placeholder="Descreva o temperamento, hábitos e outras informações importantes…"
-              autoCapitalize="sentences"
-              autoCorrect
-              autoComplete="off"
-              textContentType="none"
-              maxLength={200}
-              multiline
-              numberOfLines={5}
-              accessibilityLabel="Descrição"
-            />
-            <Text style={styles.counter}>{form.descricao.length}/200</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.section}>Localização</Text>
-            <View style={styles.row}>
               <TextField
-                label="Cidade *"
-                value={form.cidade}
-                onChangeText={updateField('cidade')}
-                placeholder="Ex: Lajeado"
+                label="Nome do animal *"
+                value={form.nome}
+                onChangeText={updateField('nome')}
+                placeholder={copy.nomePlaceholder}
                 autoCapitalize="words"
                 autoComplete="off"
-                textContentType="addressCity"
-                maxLength={60}
-                accessibilityLabel="Cidade"
-                style={styles.cidadeField}
+                textContentType="none"
+                maxLength={80}
+                accessibilityLabel="Nome do animal"
               />
+
+              <ChipGroup
+                label="Espécie"
+                required
+                options={ESPECIE_OPTIONS}
+                value={form.especie}
+                onChange={updateField('especie')}
+                accent={theme.primary}
+              />
+
               <TextField
-                label="UF *"
-                value={form.uf}
-                onChangeText={handleUfChange}
-                placeholder="Ex: RS"
-                autoCapitalize="characters"
+                label="Raça *"
+                value={form.raca}
+                onChangeText={updateField('raca')}
+                placeholder="Ex: SRD, Labrador"
+                autoCapitalize="words"
                 autoComplete="off"
-                textContentType="addressState"
-                maxLength={2}
-                accessibilityLabel="UF"
-                style={styles.ufField}
+                textContentType="none"
+                maxLength={60}
+                accessibilityLabel="Raça"
               />
+
+              <View style={styles.field}>
+                <Text style={styles.label}>Idade</Text>
+                <Pressable
+                  onPress={() => setIdadeOpen(true)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Idade, ${idadeLabel}`}
+                  style={styles.select}
+                >
+                  <Text style={[styles.selectText, form.idade === '' && styles.selectPlaceholder]}>
+                    {idadeLabel}
+                  </Text>
+                </Pressable>
+              </View>
+
+              <ChipGroup
+                label="Porte"
+                required
+                options={PORTE_OPTIONS}
+                value={form.porte}
+                onChange={updateField('porte')}
+                accent={theme.primary}
+              />
+
+              <TextField
+                label="Descrição *"
+                value={form.descricao}
+                onChangeText={updateField('descricao')}
+                placeholder="Descreva o temperamento, hábitos e outras informações importantes…"
+                autoCapitalize="sentences"
+                autoCorrect
+                autoComplete="off"
+                textContentType="none"
+                maxLength={200}
+                multiline
+                numberOfLines={5}
+                accessibilityLabel="Descrição"
+              />
+              <Text style={styles.counter}>{form.descricao.length}/200</Text>
             </View>
-          </View>
 
-          {error ? (
-            <Text style={styles.alert} accessibilityRole="alert" accessibilityLiveRegion="polite">
-              {error}
-            </Text>
-          ) : null}
+            <View style={styles.card}>
+              <Text style={styles.section}>Localização</Text>
+              <View style={styles.row}>
+                <TextField
+                  label="Cidade *"
+                  value={form.cidade}
+                  onChangeText={updateField('cidade')}
+                  placeholder="Ex: Lajeado"
+                  autoCapitalize="words"
+                  autoComplete="off"
+                  textContentType="addressCity"
+                  maxLength={60}
+                  accessibilityLabel="Cidade"
+                  style={styles.cidadeField}
+                />
+                <TextField
+                  label="UF *"
+                  value={form.uf}
+                  onChangeText={handleUfChange}
+                  placeholder="Ex: RS"
+                  autoCapitalize="characters"
+                  autoComplete="off"
+                  textContentType="addressState"
+                  maxLength={2}
+                  accessibilityLabel="UF"
+                  style={styles.ufField}
+                />
+              </View>
+            </View>
 
-          <View style={styles.actions}>
-            <Pressable
-              onPress={() => navigation.goBack()}
-              disabled={submitting}
-              accessibilityRole="button"
-              accessibilityLabel="Cancelar"
-              style={({ pressed }) => [styles.cancel, pressed && styles.cancelPressed]}
-            >
-              <Text style={styles.cancelText}>Cancelar</Text>
-            </Pressable>
-            <Pressable
-              onPress={handleSubmit}
-              disabled={submitting}
-              accessibilityRole="button"
-              accessibilityLabel="Salvar animal"
-              accessibilityState={{ disabled: submitting, busy: submitting }}
-              style={({ pressed }) => [
-                styles.submit,
-                { backgroundColor: theme.primary },
-                submitting && styles.submitDisabled,
-                pressed && !submitting && styles.submitPressed,
-              ]}
-            >
-              <Text style={styles.submitText}>{submitting ? 'Salvando…' : 'Salvar animal'}</Text>
-            </Pressable>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+            {error ? (
+              <Text style={styles.alert} accessibilityRole="alert" accessibilityLiveRegion="polite">
+                {error}
+              </Text>
+            ) : null}
+
+            <View style={styles.actions}>
+              <Pressable
+                onPress={() => navigation.goBack()}
+                disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel="Cancelar"
+                style={({ pressed }) => [styles.cancel, pressed && styles.cancelPressed]}
+              >
+                <Text style={styles.cancelText}>Cancelar</Text>
+              </Pressable>
+              <Pressable
+                onPress={handleSubmit}
+                disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel="Salvar animal"
+                accessibilityState={{ disabled: submitting, busy: submitting }}
+                style={({ pressed }) => [
+                  styles.submit,
+                  { backgroundColor: theme.primary },
+                  submitting && styles.submitDisabled,
+                  pressed && !submitting && styles.submitPressed,
+                ]}
+              >
+                <Text style={styles.submitText}>{submitting ? 'Salvando…' : 'Salvar animal'}</Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
 
       <Modal
         visible={idadeOpen}
@@ -536,6 +714,19 @@ const styles = StyleSheet.create({
     color: colors.surface,
     fontWeight: '700',
     fontSize: 15,
+  },
+  state: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+    gap: 12,
+  },
+  stateText: {
+    color: colors.muted,
+    fontSize: 15,
+    textAlign: 'center',
+    lineHeight: 22,
   },
   modalOverlay: {
     flex: 1,

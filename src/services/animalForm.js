@@ -55,6 +55,47 @@ export function emptyAnimalForm(usuario) {
   };
 }
 
+export function formFromAnimal(animal) {
+  return {
+    nome: animal?.nome || '',
+    especie: animal?.especie || '',
+    raca: animal?.raca?.nome || '',
+    idade: animal?.idade === null || animal?.idade === undefined ? '' : String(animal.idade),
+    porte: animal?.porte || '',
+    descricao: animal?.descricao || '',
+    cidade: animal?.cidade?.nome || '',
+    uf: animal?.cidade?.uf || '',
+  };
+}
+
+function normalizeAnimalForm(form) {
+  return {
+    nome: (form.nome || '').trim(),
+    especie: form.especie || '',
+    raca: (form.raca || '').trim(),
+    idade: form.idade === '' || form.idade === undefined || form.idade === null ? '' : String(form.idade),
+    porte: form.porte || '',
+    descricao: (form.descricao || '').trim(),
+    cidade: (form.cidade || '').trim(),
+    uf: (form.uf || '').trim().toUpperCase(),
+  };
+}
+
+export function isAnimalFormDirty(form, snapshot) {
+  const current = normalizeAnimalForm(form);
+  const initial = normalizeAnimalForm(snapshot);
+  return (
+    current.nome !== initial.nome ||
+    current.especie !== initial.especie ||
+    current.raca !== initial.raca ||
+    current.idade !== initial.idade ||
+    current.porte !== initial.porte ||
+    current.descricao !== initial.descricao ||
+    current.cidade !== initial.cidade ||
+    current.uf !== initial.uf
+  );
+}
+
 export function validateAnimalForm(form) {
   if (!form.nome.trim()) {
     return 'Informe o nome';
@@ -90,8 +131,10 @@ export function validateAnimalForm(form) {
 }
 
 export function buildAnimalBody(form, status) {
-  if (!isStatusPermitido(status)) {
-    return null;
+  if (status !== undefined && status !== null && status !== '') {
+    if (!isStatusPermitido(status)) {
+      return null;
+    }
   }
 
   const body = {
@@ -99,13 +142,16 @@ export function buildAnimalBody(form, status) {
     descricao: form.descricao.trim(),
     especie: form.especie,
     porte: form.porte,
-    status,
     cidade: {
       nome: form.cidade.trim(),
       uf: form.uf.trim().toUpperCase(),
     },
     raca: { nome: form.raca.trim() },
   };
+
+  if (isStatusPermitido(status)) {
+    body.status = status;
+  }
 
   if (form.idade !== '') {
     body.idade = Number(form.idade);
