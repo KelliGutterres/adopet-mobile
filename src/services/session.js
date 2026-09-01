@@ -35,6 +35,10 @@ export async function saveSession(token, usuario) {
   await SecureStore.setItemAsync(USUARIO_KEY, JSON.stringify(usuario));
 }
 
+export async function saveUsuario(usuario) {
+  await SecureStore.setItemAsync(USUARIO_KEY, JSON.stringify(usuario));
+}
+
 async function deleteKey(key) {
   try {
     await SecureStore.deleteItemAsync(key);

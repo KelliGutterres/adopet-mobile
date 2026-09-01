@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Botão buscar por foto P/E (spec 006).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Botão buscar por foto P/E (spec 006).
 
 Backend (quando a fase de IA começar):
 
@@ -131,7 +131,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Scaffold Expo + pastas + nav + cliente HTTP (spec 001)
 - [x] Cadastro de conta (dados pessoais, e-mail, senha, contato, cidade) — RF0001 parcial (spec 003)
 - [x] Consulta de perfil + logout (avatar no header; aba Similaridade placeholder) — spec 009
-- [ ] Edição de conta — RF0001 parcial (spec futura; depende de API)
+- [x] Edição de conta (nome, e-mail, contato, cidade; sem senha) — RF0001 (spec 010)
 - [x] Login (e-mail/senha) — RF0002
 - [x] Esqueci senha (redefinir via e-mail) — RF0002 parcial (spec 004)
 - [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão e adoção (ONG/web) — RF0003 parcial
@@ -392,6 +392,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Mobile: usuário cadastra só P/E (spec 007); tela Encontrei/Perdi após o FAB; adoção só a ONG no web; backend intocado | Spec 007 / autora |
 | 2026-08-24 | Mobile: detalhe do animal é a spec **008** (não a 006); uma tela para A/P/E; `GET /animais/:id`; só leitura; filtros RF0005 deixam o número 008 | Spec 008 / autora |
 | 2026-08-31 | Mobile: perfil no header (avatar + tela de consulta); logout imediato; lápis “Em breve”; aba Similaridade no lugar de Perfil (spec 009). Edição persistida continua fora (sem PUT na API) | Spec 009 / autora |
+| 2026-08-31 | Mobile: edição de perfil na mesma tela (spec 010); `PATCH /usuarios/me`; prefill da sessão; Alert se descartar dirty; sem GET extra; senha continua no esqueci (004) | Spec 010 / autora |
 
 ---
 
@@ -412,6 +413,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Cadastro mobile de animal perdido/encontrado (spec 007)
 - [x] Detalhe mobile A/P/E (spec 008)
 - [x] Perfil mobile (consulta + logout + aba Similaridade — spec 009)
+- [x] Edição de perfil mobile (`PATCH /usuarios/me` — spec 010)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -438,3 +440,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-23 | Cadastro mobile P/E (spec 007): FAB → tela Encontrei/Perdi → form; sem adoção no app; cidade da sessão |
 | 2026-08-24 | Spec 008 (detalhe A/P/E): toque no card → `GET /animais/:id`; uma tela para as três listas; só leitura |
 | 2026-08-31 | Spec 009: avatar no header das listas; tela Perfil (consulta da sessão); logout imediato; lápis “Em breve”; aba Similaridade placeholder |
+| 2026-08-31 | Spec 010: edição de perfil na mesma tela; PATCH `/usuarios/me`; sessão atualizada sem novo JWT; Alert ao descartar dirty |

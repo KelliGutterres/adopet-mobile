@@ -5,6 +5,7 @@ import {
   readStoredToken,
   readStoredUsuario,
   saveSession,
+  saveUsuario,
   setMemoryToken,
 } from '../services/session';
 
@@ -91,6 +92,10 @@ export function AuthProvider({ children }) {
         await saveSession(result.token, result.usuario);
         setToken(result.token);
         setUsuario(result.usuario);
+      },
+      async atualizarPerfil(nextUsuario) {
+        await saveUsuario(nextUsuario);
+        setUsuario(nextUsuario);
       },
       async logout() {
         await clearSession();
