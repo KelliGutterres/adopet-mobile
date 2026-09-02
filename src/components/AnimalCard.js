@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, statusTheme } from '../theme/colors';
 import {
-  iniciaisNome,
   labelCidade,
   labelEspecie,
   labelPorte,
@@ -11,6 +10,7 @@ import {
   tituloCard,
 } from '../services/animalLabels';
 import { ChevronIcon, InfoIcon, MapPinIcon } from './ListIcons';
+import AnimalPhoto from './AnimalPhoto';
 
 function Chip({ label, backgroundColor, color }) {
   if (!label) {
@@ -47,9 +47,7 @@ export default function AnimalCard({ animal, onPress, showNome = false, showStat
       android_ripple={{ color: colors.border }}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
-      <View style={[styles.photo, { backgroundColor: theme.chipBg }]}>
-        <Text style={[styles.initials, { color: theme.primary }]}>{iniciaisNome(animal.nome)}</Text>
-      </View>
+      <AnimalPhoto uri={animal.urlImagem} nome={animal.nome} theme={theme} size={72} borderRadius={12} />
       <View style={styles.body}>
         <Text style={styles.title} numberOfLines={1}>
           {title}
@@ -99,17 +97,6 @@ const styles = StyleSheet.create({
   },
   cardPressed: {
     opacity: 0.85,
-  },
-  photo: {
-    width: 72,
-    height: 72,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  initials: {
-    fontSize: 24,
-    fontWeight: '800',
   },
   body: {
     flex: 1,

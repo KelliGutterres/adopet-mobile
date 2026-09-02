@@ -15,14 +15,17 @@ import { StatusBar } from 'expo-status-bar';
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextField from '../components/TextField';
+import AnimalPhoto from '../components/AnimalPhoto';
 import { ChevronLeftIcon } from '../components/ListIcons';
 import { useAuth } from '../hooks/useAuth';
 import {
   atualizarAnimal,
   buscarAnimal,
   criarAnimal,
+  enviarImagem,
   isAnimalDoUsuario,
   parseIdAnimal,
+  removerImagem,
 } from '../services/animaisService';
 import {
   ESPECIE_OPTIONS,
@@ -37,6 +40,12 @@ import {
   labelIdadeOpcao,
   validateAnimalForm,
 } from '../services/animalForm';
+import {
+  ImagePickError,
+  pickAnimalJpeg,
+  showPermissionDeniedAlert,
+  showPhotoSourceAlert,
+} from '../services/imagePicker';
 import { colors, statusTheme } from '../theme/colors';
 
 function ChipGroup({ label, required, options, value, onChange, accent }) {
@@ -93,6 +102,9 @@ export default function AnimalFormScreen() {
   const [loading, setLoading] = useState(isEdit);
   const [loaded, setLoaded] = useState(!isEdit);
   const [idadeOpen, setIdadeOpen] = useState(false);
+  const [localPhotoUri, setLocalPhotoUri] = useState(null);
+  const [remotePhotoUrl, setRemotePhotoUrl] = useState(null);
+  const [photoRemoved, setPhotoRemoved] = useState(false);
 
   const allowLeaveRef = useRef(false);
   const dirtyRef = useRef(false);
@@ -100,11 +112,14 @@ export default function AnimalFormScreen() {
   const status = animalStatus || (isStatusPermitido(statusParam) ? statusParam : null);
   const theme = (isStatusPermitido(status) && statusTheme[status]) || statusTheme.E;
   const copy = FORM_COPY[status] || FORM_COPY.E;
-  const dirty = useMemo(
+  const fieldsDirty = useMemo(
     () => isEdit && isAnimalFormDirty(form, snapshot),
     [isEdit, form, snapshot],
   );
+  const photoDirty = Boolean(localPhotoUri) || photoRemoved;
+  const dirty = fieldsDirty || (isEdit && photoDirty);
   dirtyRef.current = dirty;
+  const previewUri = localPhotoUri || (!photoRemoved && remotePhotoUrl) || null;
 
   const idadeOptions = useMemo(
     () => Array.from({ length: IDADE_MAX + 1 }, (_, idade) => idade),
@@ -146,6 +161,9 @@ export default function AnimalFormScreen() {
         setSnapshot(next);
         setAnimalNome((animal.nome || '').trim());
         setAnimalStatus(animal.status);
+        setRemotePhotoUrl(animal.urlImagem || null);
+        setLocalPhotoUri(null);
+        setPhotoRemoved(false);
         setLoaded(true);
       } catch (err) {
         if (cancelled) {
@@ -220,6 +238,63 @@ export default function AnimalFormScreen() {
     }));
   }
 
+  function goToListAfterCreate() {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'MainTabs',
+            state: {
+              routes: [
+                { name: 'Perdidos' },
+                { name: 'Encontrados' },
+                { name: 'Adocao' },
+              ],
+              index: statusParam === 'P' ? 0 : 1,
+            },
+          },
+        ],
+      }),
+    );
+  }
+
+  async function handlePickPhoto(source) {
+    try {
+      const uri = await pickAnimalJpeg(source);
+      setLocalPhotoUri(uri);
+      setPhotoRemoved(false);
+      setError('');
+    } catch (err) {
+      if (err instanceof ImagePickError && err.code === 'canceled') {
+        return;
+      }
+      if (err instanceof ImagePickError && err.code.startsWith('denied')) {
+        showPermissionDeniedAlert(err.code);
+        return;
+      }
+      setError(err.message || 'Não foi possível usar a foto.');
+    }
+  }
+
+  function handleChoosePhoto() {
+    if (submitting) {
+      return;
+    }
+    showPhotoSourceAlert({
+      onCamera: () => handlePickPhoto('camera'),
+      onLibrary: () => handlePickPhoto('library'),
+    });
+  }
+
+  function handleRemovePhoto() {
+    if (submitting || !previewUri) {
+      return;
+    }
+    setLocalPhotoUri(null);
+    setPhotoRemoved(true);
+  }
+
   async function handleSubmit() {
     setError('');
     const message = validateAnimalForm(form);
@@ -243,7 +318,14 @@ export default function AnimalFormScreen() {
 
       setSubmitting(true);
       try {
-        await atualizarAnimal(idAnimal, body);
+        if (fieldsDirty) {
+          await atualizarAnimal(idAnimal, body);
+        }
+        if (localPhotoUri) {
+          await enviarImagem(idAnimal, localPhotoUri);
+        } else if (photoRemoved) {
+          await removerImagem(idAnimal);
+        }
         allowLeaveRef.current = true;
         leave();
       } catch (err) {
@@ -258,6 +340,11 @@ export default function AnimalFormScreen() {
       return;
     }
 
+    if (!localPhotoUri) {
+      setError('Adicione uma foto');
+      return;
+    }
+
     const body = buildAnimalBody(form, statusParam);
     if (!body) {
       navigation.replace('ChooseAnimalStatus');
@@ -265,26 +352,28 @@ export default function AnimalFormScreen() {
     }
 
     setSubmitting(true);
+    let keepBusy = false;
     try {
-      await criarAnimal(body);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'MainTabs',
-              state: {
-                routes: [
-                  { name: 'Perdidos' },
-                  { name: 'Encontrados' },
-                  { name: 'Adocao' },
-                ],
-                index: statusParam === 'P' ? 0 : 1,
-              },
-            },
-          ],
-        }),
-      );
+      const animal = await criarAnimal(body);
+      if (!animal?.idAnimal) {
+        setError('Não foi possível salvar');
+        return;
+      }
+      try {
+        await enviarImagem(animal.idAnimal, localPhotoUri);
+        goToListAfterCreate();
+      } catch (imgErr) {
+        if (imgErr.status === 401) {
+          await logout();
+          return;
+        }
+        keepBusy = true;
+        Alert.alert(
+          'Foto não enviada',
+          'Animal salvo, mas a foto não foi enviada. Você pode adicioná-la em Meus animais.',
+          [{ text: 'OK', onPress: goToListAfterCreate }],
+        );
+      }
     } catch (err) {
       if (err.status === 401) {
         await logout();
@@ -292,7 +381,9 @@ export default function AnimalFormScreen() {
       }
       setError(err.message || 'Erro na requisição');
     } finally {
-      setSubmitting(false);
+      if (!keepBusy) {
+        setSubmitting(false);
+      }
     }
   }
 
@@ -360,6 +451,62 @@ export default function AnimalFormScreen() {
             contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom, 16) + 16 }]}
             keyboardShouldPersistTaps="handled"
           >
+            <View style={styles.card}>
+              <Text style={styles.section}>Foto{isEdit ? '' : ' *'}</Text>
+              <Text style={styles.photoHint}>
+                {isEdit
+                  ? 'Uma foto; a nova substitui a anterior. Pode remover.'
+                  : 'Obrigatória. Uma foto; a nova substitui a anterior.'}
+              </Text>
+              <Pressable
+                onPress={handleChoosePhoto}
+                disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel="Foto do animal"
+                style={styles.photoPreview}
+              >
+                <AnimalPhoto
+                  uri={previewUri}
+                  nome={form.nome}
+                  theme={theme}
+                  size={160}
+                  borderRadius={16}
+                  showCameraFallback
+                />
+              </Pressable>
+              <View style={styles.photoActions}>
+                <Pressable
+                  onPress={() => handlePickPhoto('camera')}
+                  disabled={submitting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Tirar foto do animal"
+                  style={({ pressed }) => [styles.photoBtn, pressed && styles.photoBtnPressed]}
+                >
+                  <Text style={[styles.photoBtnText, { color: theme.primary }]}>Tirar foto</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handlePickPhoto('library')}
+                  disabled={submitting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Escolher foto da galeria"
+                  style={({ pressed }) => [styles.photoBtn, pressed && styles.photoBtnPressed]}
+                >
+                  <Text style={[styles.photoBtnText, { color: theme.primary }]}>Galeria</Text>
+                </Pressable>
+              </View>
+              {previewUri ? (
+                <Pressable
+                  onPress={handleRemovePhoto}
+                  disabled={submitting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Remover foto do animal"
+                  style={({ pressed }) => [styles.removePhoto, pressed && styles.photoBtnPressed]}
+                >
+                  <Text style={styles.removePhotoText}>Remover foto</Text>
+                </Pressable>
+              ) : null}
+            </View>
+
             <View style={styles.card}>
               <Text style={styles.section}>Informações básicas</Text>
 
@@ -600,6 +747,50 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.text,
     marginBottom: 12,
+  },
+  photoHint: {
+    fontSize: 13,
+    color: colors.muted,
+    lineHeight: 18,
+    marginTop: -4,
+    marginBottom: 12,
+  },
+  photoPreview: {
+    alignSelf: 'center',
+    marginBottom: 12,
+  },
+  photoActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  photoBtn: {
+    flex: 1,
+    minHeight: 44,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.listBackground,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+  },
+  photoBtnPressed: {
+    opacity: 0.85,
+  },
+  photoBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  removePhoto: {
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
+  },
+  removePhotoText: {
+    color: colors.danger,
+    fontWeight: '700',
+    fontSize: 14,
   },
   field: {
     marginBottom: 16,

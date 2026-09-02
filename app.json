@@ -21,7 +21,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O AdoPet acessa suas fotos para escolher a imagem do animal.",
+          "cameraPermission": "O AdoPet usa a câmera para fotografar o animal.",
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }

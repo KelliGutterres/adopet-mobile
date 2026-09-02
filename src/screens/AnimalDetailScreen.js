@@ -20,7 +20,6 @@ import {
 } from '../services/animaisService';
 import { isStatusPermitido } from '../services/animalForm';
 import {
-  iniciaisNome,
   labelCidade,
   labelEspecie,
   labelIdade,
@@ -30,6 +29,7 @@ import {
   tituloCard,
 } from '../services/animalLabels';
 import { ChevronLeftIcon, MapPinIcon, PencilIcon, TrashIcon } from '../components/ListIcons';
+import AnimalPhoto from '../components/AnimalPhoto';
 import { colors, statusTheme } from '../theme/colors';
 
 function Chip({ label, backgroundColor, color }) {
@@ -299,11 +299,14 @@ export default function AnimalDetailScreen() {
           ]}
         >
           <View style={styles.card}>
-            <View style={[styles.photo, { backgroundColor: theme.chipBg }]}>
-              <Text style={[styles.initials, { color: theme.primary }]}>
-                {iniciaisNome(nomeCadastrado)}
-              </Text>
-            </View>
+            <AnimalPhoto
+              uri={animal.urlImagem}
+              nome={nomeCadastrado}
+              theme={theme}
+              size={96}
+              borderRadius={16}
+              style={styles.photoCenter}
+            />
             <Text style={styles.title}>{title}</Text>
             {situacao ? (
               <Chip label={situacao} backgroundColor={theme.chipBg} color={theme.chipText} />
@@ -408,17 +411,8 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 10,
   },
-  photo: {
-    width: 96,
-    height: 96,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+  photoCenter: {
     alignSelf: 'center',
-  },
-  initials: {
-    fontSize: 36,
-    fontWeight: '800',
   },
   title: {
     fontSize: 22,

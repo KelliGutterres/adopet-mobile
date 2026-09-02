@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012).
 
 Backend (quando a fase de IA começar):
 
@@ -137,8 +137,8 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão dos próprios P/E (spec 011); adoção (ONG/web) — RF0003
 - [x] Listagem: adoção, perdidos, localizados/encontrados — RF0004 (spec 005)
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
-- [x] Detalhes do animal (descrição, localização; foto placeholder — spec 008) — RF0006
-- [ ] Upload por galeria ou câmera — RF0007
+- [x] Detalhes do animal (fotos, descrição, localização — spec 008 + spec 012) — RF0006
+- [x] Upload por galeria ou câmera (spec 012; consome backend spec 010) — RF0007
 - [ ] Comparação inteligente de imagens — RF0008 (botão placeholder nas listas P/E — spec 006; aba Similaridade placeholder — spec 009; fluxo real na fase 2)
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
 
@@ -333,7 +333,7 @@ Critério de pronto: [comportamento verificável]
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
 - Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
 - Loading, empty state e erro em listas (nas specs de listagem).
-- Câmera/galeria para RF0007 (fase 2).
+- Câmera/galeria para RF0007 (spec 012: `expo-image-picker` + JPEG via `expo-image-manipulator`; upload multipart no Node).
 
 ### IA (Python, pasta dentro do backend)
 - Endpoint(s) claros de comparação; contrato JSON documentado.
@@ -394,6 +394,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Mobile: perfil no header (avatar + tela de consulta); logout imediato; lápis “Em breve”; aba Similaridade no lugar de Perfil (spec 009). Edição persistida continua fora (sem PUT na API) | Spec 009 / autora |
 | 2026-08-31 | Mobile: edição de perfil na mesma tela (spec 010); `PATCH /usuarios/me`; prefill da sessão; Alert se descartar dirty; sem GET extra; senha continua no esqueci (004) | Spec 010 / autora |
 | 2026-08-31 | Mobile: Meus animais no Perfil (spec 011); `GET /animais` filtrado por `idUsuario`; editar/excluir só no detalhe dessa jornada; `PATCH` sem `status`; listas públicas só leitura | Spec 011 / autora |
+| 2026-09-01 | Mobile: foto do animal (spec 012); cadastro P/E exige foto no app e chama `POST /animais` + `POST .../imagem`; JPEG no cliente (HEIC iOS); listas/detalhe exibem `urlImagem` | Spec 012 / autora |
 
 ---
 
@@ -416,6 +417,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Perfil mobile (consulta + logout + aba Similaridade — spec 009)
 - [x] Edição de perfil mobile (`PATCH /usuarios/me` — spec 010)
 - [x] Meus animais mobile (listar / editar / excluir P/E — spec 011)
+- [x] Upload/captura de foto do animal no mobile (spec 012; RF0007)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -444,3 +446,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Spec 009: avatar no header das listas; tela Perfil (consulta da sessão); logout imediato; lápis “Em breve”; aba Similaridade placeholder |
 | 2026-08-31 | Spec 010: edição de perfil na mesma tela; PATCH `/usuarios/me`; sessão atualizada sem novo JWT; Alert ao descartar dirty |
 | 2026-08-31 | Spec 011: Meus animais no Perfil; listar/editar/excluir P/E do usuário; detalhe com lápis/lixeira só nessa jornada |
+| 2026-09-01 | Spec 012: galeria/câmera no form P/E; foto obrigatória no cadastro (front); JPEG via manipulator; `urlImagem` no card e no detalhe |

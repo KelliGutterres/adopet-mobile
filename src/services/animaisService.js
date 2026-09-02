@@ -1,4 +1,4 @@
-import { ApiError, requestJson } from './api';
+import { ApiError, requestForm, requestJson } from './api';
 
 export async function listarAnimais({ status } = {}) {
   const query = status ? `?status=${encodeURIComponent(status)}` : '';
@@ -70,6 +70,37 @@ export async function excluirAnimal(id) {
   }
 
   await requestJson(`/animais/${idAnimal}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function enviarImagem(id, uri) {
+  const idAnimal = parseIdAnimal(id);
+  if (!idAnimal) {
+    throw new ApiError('id inválido', 400);
+  }
+  if (!uri) {
+    throw new ApiError('imagem é obrigatório', 400);
+  }
+
+  const formData = new FormData();
+  formData.append('imagem', {
+    uri,
+    name: 'foto.jpg',
+    type: 'image/jpeg',
+  });
+
+  const data = await requestForm(`/animais/${idAnimal}/imagem`, formData);
+  return data?.animal ?? null;
+}
+
+export async function removerImagem(id) {
+  const idAnimal = parseIdAnimal(id);
+  if (!idAnimal) {
+    throw new ApiError('id inválido', 400);
+  }
+
+  await requestJson(`/animais/${idAnimal}/imagem`, {
     method: 'DELETE',
   });
 }
