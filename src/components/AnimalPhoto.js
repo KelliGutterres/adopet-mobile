@@ -10,11 +10,14 @@ export default function AnimalPhoto({
   size = 72,
   borderRadius = 12,
   showCameraFallback = false,
+  fill = false,
   style,
 }) {
   const [failed, setFailed] = useState(false);
   const showImage = Boolean(uri) && !failed;
   const initials = iniciaisNome(nome);
+  const iconSize = fill ? 64 : Math.round(size * 0.36);
+  const fontSize = fill ? 64 : Math.round(size * 0.34);
 
   useEffect(() => {
     setFailed(false);
@@ -24,29 +27,24 @@ export default function AnimalPhoto({
     <View
       style={[
         styles.wrap,
-        {
-          width: size,
-          height: size,
-          borderRadius,
-          backgroundColor: theme.chipBg,
-        },
+        fill
+          ? { width: '100%', aspectRatio: 1, borderRadius, backgroundColor: theme.chipBg }
+          : { width: size, height: size, borderRadius, backgroundColor: theme.chipBg },
         style,
       ]}
     >
       {showImage ? (
         <Image
           source={{ uri }}
-          style={[styles.image, { borderRadius }]}
+          style={styles.image}
           resizeMode="cover"
           onError={() => setFailed(true)}
           accessibilityIgnoresInvertColors
         />
       ) : showCameraFallback ? (
-        <CameraIcon color={theme.primary} size={Math.round(size * 0.36)} />
+        <CameraIcon color={theme.primary} size={iconSize} />
       ) : (
-        <Text style={[styles.initials, { color: theme.primary, fontSize: Math.round(size * 0.34) }]}>
-          {initials}
-        </Text>
+        <Text style={[styles.initials, { color: theme.primary, fontSize }]}>{initials}</Text>
       )}
     </View>
   );

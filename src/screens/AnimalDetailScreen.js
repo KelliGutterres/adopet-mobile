@@ -298,28 +298,30 @@ export default function AnimalDetailScreen() {
             { paddingBottom: Math.max(insets.bottom, 16) + 16 },
           ]}
         >
-          <View style={styles.card}>
+          <View style={styles.heroCard}>
             <AnimalPhoto
               uri={animal.urlImagem}
               nome={nomeCadastrado}
               theme={theme}
-              size={96}
-              borderRadius={16}
-              style={styles.photoCenter}
+              fill
+              borderRadius={0}
+              style={styles.heroPhoto}
             />
-            <Text style={styles.title}>{title}</Text>
-            {situacao ? (
-              <Chip label={situacao} backgroundColor={theme.chipBg} color={theme.chipText} />
-            ) : null}
-            {animal?.status === 'E' && nomeCadastrado ? (
-              <View style={styles.nomeCadastrado}>
-                <Text style={styles.infoLabel}>Nome cadastrado</Text>
-                <Text style={styles.infoValue}>{nomeCadastrado}</Text>
+            <View style={styles.heroBody}>
+              <Text style={styles.title}>{title}</Text>
+              {situacao ? (
+                <Chip label={situacao} backgroundColor={theme.chipBg} color={theme.chipText} />
+              ) : null}
+              {animal?.status === 'E' && nomeCadastrado ? (
+                <View style={styles.nomeCadastrado}>
+                  <Text style={styles.infoLabel}>Nome cadastrado</Text>
+                  <Text style={styles.infoValue}>{nomeCadastrado}</Text>
+                </View>
+              ) : null}
+              <View style={styles.chips}>
+                <Chip label={especie} backgroundColor={theme.chipBg} color={theme.chipText} />
+                <Chip label={porte} backgroundColor={colors.chipPorteBg} color={colors.chipPorteText} />
               </View>
-            ) : null}
-            <View style={styles.chips}>
-              <Chip label={especie} backgroundColor={theme.chipBg} color={theme.chipText} />
-              <Chip label={porte} backgroundColor={colors.chipPorteBg} color={colors.chipPorteText} />
             </View>
           </View>
 
@@ -411,8 +413,21 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 10,
   },
-  photoCenter: {
-    alignSelf: 'center',
+  heroCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  heroPhoto: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  heroBody: {
+    padding: 16,
+    gap: 10,
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,
