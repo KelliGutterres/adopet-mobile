@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013).
 
 Backend (quando a fase de IA começar):
 
@@ -385,6 +385,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-22 | Mobile: React Native em **JavaScript**, executado com **Expo** (Go + emulador); **React Navigation**; template `blank`; HTTP `fetch` | Spec 001 / autora |
 | 2026-08-22 | Mobile: login do usuário com JWT no **SecureStore**; cadastro e esqueci senha ficam para specs seguintes | Spec 002 / autora |
 | 2026-08-22 | Mobile: Expo **SDK 54** (`expo@54.0.37`), alinhado ao Expo Go da App Store (iOS) | Autora |
+| 2026-09-07 | Mobile: Expo **SDK 57** (`expo@57.0.20`), alinhado ao Expo Go atual da App Store (iOS); salto único 54→57 (spec 013) | Spec 013 / autora |
 | 2026-08-23 | Mobile: cadastro de usuário (spec 003) com login automático, cidade inline, senha mín. 6, máscara de telefone, sem termos/OAuth | Spec 003 / autora |
 | 2026-08-23 | Mobile: esqueci senha do usuário (spec 004) com `PUT /auth/usuarios/senha`, um form, volta ao login sem JWT; listagem passa a spec 005 | Spec 004 / autora |
 | 2026-08-23 | Mobile: listagem A/P/E em cards (spec 005); barra Perdidos/Encontrados/+/Adoção/Perfil; Encontrados sem nome no card; sem Sair nesta fatia | Spec 005 / autora |
@@ -418,6 +419,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Edição de perfil mobile (`PATCH /usuarios/me` — spec 010)
 - [x] Meus animais mobile (listar / editar / excluir P/E — spec 011)
 - [x] Upload/captura de foto do animal no mobile (spec 012; RF0007)
+- [x] Upgrade Expo SDK 54 → 57 no mobile (spec 013; Expo Go iOS)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -447,3 +449,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Spec 010: edição de perfil na mesma tela; PATCH `/usuarios/me`; sessão atualizada sem novo JWT; Alert ao descartar dirty |
 | 2026-08-31 | Spec 011: Meus animais no Perfil; listar/editar/excluir P/E do usuário; detalhe com lápis/lixeira só nessa jornada |
 | 2026-09-01 | Spec 012: galeria/câmera no form P/E; foto obrigatória no cadastro (front); JPEG via manipulator; `urlImagem` no card e no detalhe |
+| 2026-09-07 | Spec 013: Expo SDK 57 (`expo@57.0.20`) para o Expo Go 57 do iPhone; Node 22.13+; telas e API inalteradas |

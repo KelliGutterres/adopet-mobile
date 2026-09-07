@@ -29,7 +29,8 @@
           "cameraPermission": "O AdoPet usa a câmera para fotografar o animal.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "expo-status-bar"
     ]
   }
 }

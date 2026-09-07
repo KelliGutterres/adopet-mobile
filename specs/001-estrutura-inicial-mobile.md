@@ -114,7 +114,7 @@ O **código é React Native** (o que a Parte 1 cita). O **Expo** é a ferramenta
 | Alias `@/` | **não** nesta fatia | Menos config no Babel; relative imports |
 | Onde testar | **Expo Go no celular e emulador Android** | Fechado pela autora |
 
-SDK Expo: **54.0.37** (alinhado ao Expo Go da App Store no iPhone; o scaffold inicial tinha vindo no SDK 57).
+SDK Expo: **57** (`expo@57.0.20`) — alinhado ao Expo Go da App Store no iPhone (spec **013**). Em 2026-08-22 o app foi rebaixado para 54.0.37 porque o Go da loja era 54; a 013 volta ao 57 quando a loja atualizou.
 
 ## Esclarecimentos (refinamento 2026-08-22)
 
