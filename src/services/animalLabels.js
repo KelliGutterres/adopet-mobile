@@ -91,16 +91,15 @@ export function tituloCard(animal) {
 }
 
 export function labelResponsavel(animal) {
-  if (animal?.status === 'A') {
-    return {
-      label: 'ONG responsável',
-      value: animal?.instituicao?.nome || animal?.usuario?.nome || '',
-    };
-  }
+  const isAdocao = animal?.status === 'A';
+  const primary = isAdocao ? animal?.instituicao : animal?.usuario;
+  const fallback = isAdocao ? animal?.usuario : animal?.instituicao;
+  const tutor = primary?.nome ? primary : fallback;
 
   return {
-    label: 'Cadastrado por',
-    value: animal?.usuario?.nome || animal?.instituicao?.nome || '',
+    label: isAdocao ? 'ONG responsável' : 'Cadastrado por',
+    value: tutor?.nome || '',
+    contato: tutor?.contato || '',
   };
 }
 

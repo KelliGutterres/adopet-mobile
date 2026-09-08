@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -28,7 +29,14 @@ import {
   labelStatus,
   tituloCard,
 } from '../services/animalLabels';
-import { ChevronLeftIcon, MapPinIcon, PencilIcon, TrashIcon } from '../components/ListIcons';
+import { whatsappHref } from '../services/whatsapp';
+import {
+  ChevronLeftIcon,
+  MapPinIcon,
+  PencilIcon,
+  TrashIcon,
+  WhatsAppIcon,
+} from '../components/ListIcons';
 import AnimalPhoto from '../components/AnimalPhoto';
 import { colors, statusTheme } from '../theme/colors';
 
@@ -166,6 +174,17 @@ export default function AnimalDetailScreen() {
     );
   }
 
+  async function handleWhatsApp(href) {
+    if (!href) {
+      return;
+    }
+    try {
+      await Linking.openURL(href);
+    } catch {
+      Alert.alert('Não foi possível abrir o WhatsApp.');
+    }
+  }
+
   async function confirmDelete() {
     if (deleting) {
       return;
@@ -198,7 +217,12 @@ export default function AnimalDetailScreen() {
   const raca = (animal?.raca?.nome || '').trim();
   const descricao = (animal?.descricao || '').trim();
   const cidade = labelCidade(animal?.cidade);
-  const responsavel = animal ? labelResponsavel(animal) : { label: '', value: '' };
+  const responsavel = animal
+    ? labelResponsavel(animal)
+    : { label: '', value: '', contato: '' };
+  const whatsappUrl = animal
+    ? whatsappHref(responsavel.contato, { nomeAnimal: animal.nome })
+    : null;
   const situacao = labelStatus(animal?.status);
   const showInfos = Boolean(especie || raca || idade || porte);
 
@@ -356,6 +380,20 @@ export default function AnimalDetailScreen() {
             <View style={styles.card}>
               <Text style={styles.section}>{responsavel.label}</Text>
               <Text style={styles.bodyText}>{responsavel.value}</Text>
+              {whatsappUrl ? (
+                <Pressable
+                  onPress={() => handleWhatsApp(whatsappUrl)}
+                  accessibilityRole="link"
+                  accessibilityLabel={`Conversar no WhatsApp com ${responsavel.value}`}
+                  style={({ pressed }) => [
+                    styles.whatsapp,
+                    pressed && styles.whatsappPressed,
+                  ]}
+                >
+                  <WhatsAppIcon size={22} />
+                  <Text style={styles.whatsappLabel}>WhatsApp</Text>
+                </Pressable>
+              ) : null}
             </View>
           ) : null}
         </ScrollView>
@@ -481,6 +519,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  whatsapp: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    minHeight: 44,
+  },
+  whatsappPressed: {
+    opacity: 0.85,
+  },
+  whatsappLabel: {
+    fontSize: 15,
+    color: colors.muted,
   },
   state: {
     flex: 1,

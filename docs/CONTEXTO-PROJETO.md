@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013). WhatsApp no detalhe (spec 014; consome backend 011).
 
 Backend (quando a fase de IA começar):
 
@@ -137,7 +137,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão dos próprios P/E (spec 011); adoção (ONG/web) — RF0003
 - [x] Listagem: adoção, perdidos, localizados/encontrados — RF0004 (spec 005)
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
-- [x] Detalhes do animal (fotos, descrição, localização — spec 008 + spec 012) — RF0006
+- [x] Detalhes do animal (fotos, descrição, localização, WhatsApp do responsável — specs 008, 012 e 014) — RF0006
 - [x] Upload por galeria ou câmera (spec 012; consome backend spec 010) — RF0007
 - [ ] Comparação inteligente de imagens — RF0008 (botão placeholder nas listas P/E — spec 006; aba Similaridade placeholder — spec 009; fluxo real na fase 2)
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
@@ -396,6 +396,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Mobile: edição de perfil na mesma tela (spec 010); `PATCH /usuarios/me`; prefill da sessão; Alert se descartar dirty; sem GET extra; senha continua no esqueci (004) | Spec 010 / autora |
 | 2026-08-31 | Mobile: Meus animais no Perfil (spec 011); `GET /animais` filtrado por `idUsuario`; editar/excluir só no detalhe dessa jornada; `PATCH` sem `status`; listas públicas só leitura | Spec 011 / autora |
 | 2026-09-01 | Mobile: foto do animal (spec 012); cadastro P/E exige foto no app e chama `POST /animais` + `POST .../imagem`; JPEG no cliente (HEIC iOS); listas/detalhe exibem `urlImagem` | Spec 012 / autora |
+| 2026-09-07 | Mobile: WhatsApp no detalhe (spec 014); ícone abaixo do responsável; `wa.me` com o `contato` do tutor (backend 011) | Spec 014 / autora |
 
 ---
 
@@ -420,6 +421,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Meus animais mobile (listar / editar / excluir P/E — spec 011)
 - [x] Upload/captura de foto do animal no mobile (spec 012; RF0007)
 - [x] Upgrade Expo SDK 54 → 57 no mobile (spec 013; Expo Go iOS)
+- [x] WhatsApp no detalhe do animal (spec 014; consome backend spec 011)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -450,3 +452,5 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Spec 011: Meus animais no Perfil; listar/editar/excluir P/E do usuário; detalhe com lápis/lixeira só nessa jornada |
 | 2026-09-01 | Spec 012: galeria/câmera no form P/E; foto obrigatória no cadastro (front); JPEG via manipulator; `urlImagem` no card e no detalhe |
 | 2026-09-07 | Spec 013: Expo SDK 57 (`expo@57.0.20`) para o Expo Go 57 do iPhone; Node 22.13+; telas e API inalteradas |
+| 2026-09-07 | Spec 014 (aguardando código): ícone WhatsApp no detalhe; `wa.me` com o contato do responsável; consome backend 011 |
+| 2026-09-07 | Spec 014 implementada: `whatsappHref` + ícone no card do responsável; `Linking.openURL` (`wa.me`); número oculto |
