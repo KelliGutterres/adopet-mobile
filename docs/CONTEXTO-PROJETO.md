@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013). WhatsApp no detalhe (spec 014; consome backend 011).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013). WhatsApp no detalhe (spec 014; consome backend 011). API no Expo Go via proxy do Metro (spec 015).
 
 Backend (quando a fase de IA começar):
 
@@ -328,7 +328,7 @@ Critério de pronto: [comportamento verificável]
 ### Mobile (React Native)
 - Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `context` / `theme`.
 - Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
-- Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL`.
+- Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL` (no Expo Go, origem do Metro + proxy local, spec 015).
 - Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E, detalhe, perfil e Meus animais na área logada, specs 005, 007, 008, 009 e 011).
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
 - Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
@@ -397,6 +397,8 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Mobile: Meus animais no Perfil (spec 011); `GET /animais` filtrado por `idUsuario`; editar/excluir só no detalhe dessa jornada; `PATCH` sem `status`; listas públicas só leitura | Spec 011 / autora |
 | 2026-09-01 | Mobile: foto do animal (spec 012); cadastro P/E exige foto no app e chama `POST /animais` + `POST .../imagem`; JPEG no cliente (HEIC iOS); listas/detalhe exibem `urlImagem` | Spec 012 / autora |
 | 2026-09-07 | Mobile: WhatsApp no detalhe (spec 014); ícone abaixo do responsável; `wa.me` com o `contato` do tutor (backend 011) | Spec 014 / autora |
+| 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
+| 2026-09-10 | Expo Go: API via proxy do Metro (spec 015); no túnel o celular não alcança `:3000` direto | Spec 015 / autora |
 
 ---
 
@@ -422,6 +424,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Upload/captura de foto do animal no mobile (spec 012; RF0007)
 - [x] Upgrade Expo SDK 54 → 57 no mobile (spec 013; Expo Go iOS)
 - [x] WhatsApp no detalhe do animal (spec 014; consome backend spec 011)
+- [x] Proxy da API pelo Metro no Expo Go / túnel (spec 015)
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 

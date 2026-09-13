@@ -19,14 +19,22 @@ npx expo start --lan
 `npx expo whoami` confirma se o PC está logado. Depois do login, **reinicie** o Metro (`Ctrl+C` e `npx expo start --lan`) e leia o QR de novo.
 
 - **Expo Go (celular, mesma Wi-Fi):** leia o **QR desta sessão**. Em `.env`, use o IP da máquina, por exemplo `EXPO_PUBLIC_API_URL=http://192.168.0.10:3000` (o celular não alcança `localhost` do PC). Libere as portas **8081** (Metro) e **3000** (API) no firewall.
+- **Wi-Fi de campus / “conexão lenta” + timeout:** redes como **Univates-Alunos** isolam o celular do PC. O QR aponta para `exp://<IP>:8081`, o Expo Go não entrega o JS e o **Tentar novamente** fica em tela branca. **Não clique em tentar novamente.** Feche o Expo Go por completo e suba com túnel:
+  ```bash
+  npm run start:tunnel
+  ```
+  No Windows o Expo **não encontra** `@expo/ngrok` instalado no global (`Install @expo/ngrok@^4.1.0 and try again`). O pacote já está no projeto. Se o túnel ngrok estourar o tempo (`took too long to connect`), use `EXPO_UNSTABLE_TUNNEL_V2=1` no `.env` (túnel da Expo, sem ngrok). Leia o **QR novo**, não o IP da LAN.
 - **Não use `--offline` no iPhone.** Com essa flag o manifesto manda o app buscar o JS em `127.0.0.1`, que no celular é o próprio aparelho — o Go mostra *There was a problem running the requested project*.
 - **Emulador Android:** `EXPO_PUBLIC_API_URL=http://10.0.2.2:3000`, depois `a` no terminal do Expo ou `npm run android`.
+
+Com o túnel, o Metro **encaminha** `/auth`, `/animais`, `/usuarios`, `/ongs` e `/health` para `http://127.0.0.1:3000` no PC (spec 015). A API precisa estar no ar (`cd D:\adopet-backend && npm run dev`). Depois de mudar `metro.config.js`, **reinicie** o Metro e recarregue o app no Expo Go. Seed: `usuario@adopet.local` / `senha123`.
 
 Não commitar `.env`.
 
 | Script | Uso |
 |--------|-----|
 | `npm start` / `npx expo start --lan` | Metro + QR Code (Expo Go na rede local) |
+| `npm run start:tunnel` | Metro via túnel (Wi-Fi de campus / isolamento entre aparelhos) |
 | `npm run android` | abre no emulador/dispositivo Android |
 
 Login com e-mail e senha (spec 002). Cadastro (spec 003), esqueci senha (spec 004) e listagem A/P/E (spec 005) já entram no app autenticado. Seed: `usuario@adopet.local` / `senha123`.
