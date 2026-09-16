@@ -154,14 +154,14 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] Auth usuário e ONG; senhas criptografadas (RNF0002)
 - [ ] CRUD usuários, instituições/ONGs, animais, etc.
 - [ ] Integração Supabase Storage (upload/recuperação; salvar só URL/referência no PostgreSQL)
-- [ ] Integração com serviço Python de comparação de imagens
+- [ ] Integração com serviço Python de comparação de imagens — **API no backend spec 012**; UI mobile ainda placeholder
 - [ ] Filtros e listagens conforme RF0004–RF0006
 
 ### Serviço de IA (Python — dentro de `adopet-backend`)
-- [ ] Pasta `ai/` (ou similar) no mesmo repositório do backend
-- [ ] Receber imagem enviada pelo usuário (via API Node)
-- [ ] Comparar com imagens já cadastradas
-- [ ] Retornar similaridades / candidatos ao backend Node
+- [x] Pasta `ai/` (ou similar) no mesmo repositório do backend
+- [x] Receber imagem enviada pelo usuário (via API Node)
+- [x] Comparar com imagens já cadastradas
+- [x] Retornar similaridades / candidatos ao backend Node
 
 ---
 
@@ -397,6 +397,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-08-31 | Mobile: Meus animais no Perfil (spec 011); `GET /animais` filtrado por `idUsuario`; editar/excluir só no detalhe dessa jornada; `PATCH` sem `status`; listas públicas só leitura | Spec 011 / autora |
 | 2026-09-01 | Mobile: foto do animal (spec 012); cadastro P/E exige foto no app e chama `POST /animais` + `POST .../imagem`; JPEG no cliente (HEIC iOS); listas/detalhe exibem `urlImagem` | Spec 012 / autora |
 | 2026-09-07 | Mobile: WhatsApp no detalhe (spec 014); ícone abaixo do responsável; `wa.me` com o `contato` do tutor (backend 011) | Spec 014 / autora |
+| 2026-09-14 | IA no backend (spec 012): ResNet50 local; `POST /animais/comparar`; botão mobile P/E continua placeholder | Backend spec 012 |
 | 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
 | 2026-09-10 | Expo Go: API via proxy do Metro (spec 015); no túnel o celular não alcança `:3000` direto | Spec 015 / autora |
 
