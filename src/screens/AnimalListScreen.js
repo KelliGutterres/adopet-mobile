@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Pressable,
   RefreshControl,
@@ -13,6 +14,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useAuth } from '../hooks/useAuth';
 import { listarAnimais } from '../services/animaisService';
 import { animalMatchesFilters, LIST_COPY } from '../services/animalLabels';
+import { startPhotoSearch } from '../services/imagePicker';
 import { colors, statusTheme } from '../theme/colors';
 import AnimalCard from '../components/AnimalCard';
 import AppHeader from '../components/AppHeader';
@@ -69,6 +71,15 @@ export default function AnimalListScreen({ route }) {
   );
 
   const empty = loading || error || filtrados.length === 0;
+  const showPhotoSearch = status === 'E' || status === 'P';
+
+  function handlePhotoSearch() {
+    startPhotoSearch({
+      onPicked: (uri) => navigation.navigate('Similaridade', { photoUri: uri }),
+      onError: (err) =>
+        Alert.alert('Não foi possível usar a foto', err?.message || 'Erro na requisição'),
+    });
+  }
 
   return (
     <View style={styles.screen}>
@@ -84,7 +95,8 @@ export default function AnimalListScreen({ route }) {
         <SearchBar
           value={busca}
           onChangeText={setBusca}
-          showPhotoSearch={status === 'E' || status === 'P'}
+          showPhotoSearch={showPhotoSearch}
+          onPhotoSearch={showPhotoSearch ? handlePhotoSearch : undefined}
         />
       </View>
       <FlatList

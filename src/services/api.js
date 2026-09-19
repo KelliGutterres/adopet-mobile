@@ -56,16 +56,27 @@ export function apiUrl(path = '') {
   return `${base}${normalizedPath}`;
 }
 
-async function fetchWithTimeout(url, options) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
+  const { timeoutMessage = NETWORK_ERROR_MESSAGE, ...fetchOptions } = options;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     return await fetch(url, {
-      ...options,
+      ...fetchOptions,
       signal: controller.signal,
     });
-  } catch {
+  } catch (err) {
+    if (__DEV__) {
+      console.error('API fetch failed', url, err);
+    }
+    if (controller.signal.aborted) {
+      throw new ApiError(timeoutMessage);
+    }
+    const detail = String(err?.message || '');
+    if (/FormData/i.test(detail)) {
+      throw new ApiError('Não foi possível enviar a foto. Recarregue o app e tente novamente.');
+    }
     throw new ApiError(NETWORK_ERROR_MESSAGE);
   } finally {
     clearTimeout(timer);
@@ -117,18 +128,23 @@ export async function requestJson(path, options = {}) {
 }
 
 export async function requestForm(path, formData, options = {}) {
-  const { method = 'POST', headers = {}, ...rest } = options;
+  const { method = 'POST', headers = {}, timeoutMs, timeoutMessage, ...rest } = options;
   const token = getMemoryToken();
 
-  const response = await fetchWithTimeout(apiUrl(path), {
-    method,
-    headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
+  const response = await fetchWithTimeout(
+    apiUrl(path),
+    {
+      method,
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+      body: formData,
+      timeoutMessage,
+      ...rest,
     },
-    body: formData,
-    ...rest,
-  });
+    timeoutMs ?? REQUEST_TIMEOUT_MS,
+  );
 
   return parseJsonResponse(response);
 }

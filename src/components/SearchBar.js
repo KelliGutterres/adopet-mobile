@@ -2,7 +2,14 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { CameraIcon, FunnelIcon, SearchIcon } from './ListIcons';
 
-export default function SearchBar({ value, onChangeText, showPhotoSearch = false }) {
+export default function SearchBar({
+  value,
+  onChangeText,
+  showPhotoSearch = false,
+  onPhotoSearch,
+}) {
+  const photoSearchEnabled = Boolean(onPhotoSearch);
+
   return (
     <View style={styles.row}>
       <View style={styles.inputWrap}>
@@ -22,12 +29,13 @@ export default function SearchBar({ value, onChangeText, showPhotoSearch = false
       </View>
       {showPhotoSearch ? (
         <Pressable
-          disabled
+          disabled={!photoSearchEnabled}
+          onPress={onPhotoSearch}
           accessibilityRole="button"
           accessibilityLabel="Buscar por foto"
-          accessibilityHint="Em breve"
-          accessibilityState={{ disabled: true }}
-          style={styles.photoSearch}
+          accessibilityHint={photoSearchEnabled ? 'Escolher foto da câmera ou galeria' : 'Em breve'}
+          accessibilityState={{ disabled: !photoSearchEnabled }}
+          style={[styles.photoSearch, !photoSearchEnabled && styles.photoSearchDisabled]}
         >
           <CameraIcon color={colors.text} size={18} />
         </Pressable>
@@ -97,6 +105,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
+  },
+  photoSearchDisabled: {
     opacity: 0.7,
   },
 });

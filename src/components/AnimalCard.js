@@ -4,6 +4,7 @@ import {
   labelCidade,
   labelEspecie,
   labelPorte,
+  labelScoreSimilarity,
   labelStatus,
   labelTutorAdocao,
   linhaCaracteristicas,
@@ -23,7 +24,13 @@ function Chip({ label, backgroundColor, color }) {
   );
 }
 
-export default function AnimalCard({ animal, onPress, showNome = false, showStatus = false }) {
+export default function AnimalCard({
+  animal,
+  onPress,
+  showNome = false,
+  showStatus = false,
+  scoreSimilarity,
+}) {
   const status = animal.status === 'A' || animal.status === 'P' ? animal.status : 'E';
   const theme = statusTheme[status];
   const isAdocao = status === 'A';
@@ -34,7 +41,9 @@ export default function AnimalCard({ animal, onPress, showNome = false, showStat
   const especie = labelEspecie(animal.especie);
   const porte = labelPorte(animal.porte);
   const situacao = showStatus ? labelStatus(animal.status) : '';
-  const accessibilityLabel = [title, situacao, contextLine, traits, especie, porte]
+  const scoreLabel = labelScoreSimilarity(scoreSimilarity);
+  const scoreA11y = scoreLabel ? `${scoreLabel} semelhante` : '';
+  const accessibilityLabel = [title, scoreA11y, situacao, contextLine, traits, especie, porte]
     .filter(Boolean)
     .join(', ');
 
@@ -69,6 +78,9 @@ export default function AnimalCard({ animal, onPress, showNome = false, showStat
           </View>
         ) : null}
         <View style={styles.chips}>
+          {scoreLabel ? (
+            <Chip label={scoreLabel} backgroundColor={colors.primary} color={colors.surface} />
+          ) : null}
           {situacao ? (
             <Chip label={situacao} backgroundColor={theme.chipBg} color={theme.chipText} />
           ) : null}

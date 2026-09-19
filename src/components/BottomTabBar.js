@@ -14,7 +14,7 @@ const ITEMS = [
   { key: 'Encontrados', label: 'Encontrados', Icon: FoundTabIcon },
   { key: 'Cadastrar', label: 'Cadastrar', fab: true },
   { key: 'Adocao', label: 'Adoção', Icon: HeartIcon },
-  { key: 'Similaridade', label: 'Similaridade', Icon: SimilarityTabIcon, disabled: true },
+  { key: 'Similaridade', label: 'Similaridade', Icon: SimilarityTabIcon },
 ];
 
 function themeForRoute(routeName) {
@@ -23,6 +23,9 @@ function themeForRoute(routeName) {
   }
   if (routeName === 'Encontrados') {
     return statusTheme.E;
+  }
+  if (routeName === 'Similaridade') {
+    return { primary: colors.primary };
   }
   return statusTheme.P;
 }

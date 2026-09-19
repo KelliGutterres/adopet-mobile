@@ -77,6 +77,15 @@ export function labelStatus(status) {
   return STATUS_LABELS[status] || '';
 }
 
+export function labelScoreSimilarity(score) {
+  const n = Number(score);
+  if (!Number.isFinite(n)) {
+    return '';
+  }
+  const pct = Math.round(Math.min(1, Math.max(0, n)) * 100);
+  return `${pct}%`;
+}
+
 export function tituloCard(animal) {
   if (animal?.status === 'E') {
     if (animal.especie === 'GATO') {

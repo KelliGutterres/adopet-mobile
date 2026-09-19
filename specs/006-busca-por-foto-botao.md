@@ -1,10 +1,11 @@
 # Spec 006 — Botão “buscar por foto” (placeholder)
 
-> **Status:** aprovada e implementada.  
+> **Status:** aprovada e implementada (placeholder).  
 > Pontos 1–3 fechados em 2026-08-23: posição A; toque desabilitado; só ícone.  
+> **Atualização (2026-09-15):** o fluxo real está na [spec 016](./016-busca-por-foto-similaridade.md) — o botão foi **ativado**. Este arquivo descreve o recorte original do placeholder.  
 > Depende de: spec 005 (listagem A/P/E + `SearchBar`).  
 > **Não altera** o `adopet-backend`.  
-> Recorte: **só o botão na UI**. Sem câmera, sem galeria, sem Storage, sem IA, **sem nenhuma rota**.
+> Recorte original: **só o botão na UI**. Sem câmera, sem galeria, sem Storage, sem IA, **sem nenhuma rota**.
 
 A comparação inteligente (RF0008) continua **fase 2**. Esta fatia só reserva o ponto de entrada nas listas de **perdidos** e **encontrados**, alinhado à decisão de **não** criar aba Similaridade.
 

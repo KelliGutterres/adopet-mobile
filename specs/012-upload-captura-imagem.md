@@ -329,6 +329,7 @@ Meus animais → detalhe → lápis → form com preview da URL (ou iniciais) �
 | 400 / 503 no POST/DELETE imagem (editar) | erro no form; não volta |
 | 401 | logout |
 | 403 | `error.message` |
+| Timeout / rede no POST imagem | criar: ponto 4; editar: “O envio da foto demorou demais…” (90 s, spec 016) |
 | URL da lista/detalhe falha ao carregar | iniciais |
 
 ---

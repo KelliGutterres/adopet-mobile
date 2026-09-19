@@ -23,7 +23,7 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 | [003](./003-cadastro-usuario.md) | Cadastro de usuário | aprovada e implementada |
 | [004](./004-esqueci-senha.md) | Esqueci a senha do usuário | aprovada e implementada |
 | [005](./005-listagem-animais.md) | Listagem de animais (A / P / E) | aprovada e implementada |
-| [006](./006-busca-por-foto-botao.md) | Botão buscar por foto (placeholder RF0008) | aprovada e implementada |
+| [006](./006-busca-por-foto-botao.md) | Botão buscar por foto (entrada P/E; fluxo na 016) | aprovada e implementada |
 | [007](./007-cadastro-animal.md) | Cadastro de animal perdido/encontrado (usuário) | aprovada e implementada |
 | [008](./008-detalhe-animal.md) | Detalhe do animal (A / P / E) | aprovada e implementada |
 | [009](./009-perfil-usuario.md) | Perfil (consulta + logout) + aba Similaridade | aprovada e implementada |
@@ -33,8 +33,8 @@ O mobile é o canal do **usuário** (`papel: "usuario"`). A ONG permanece no `ad
 | [013](./013-upgrade-expo-sdk-57.md) | Upgrade Expo SDK 54 → 57 (Expo Go iOS) | aprovada e implementada |
 | [014](./014-contato-whatsapp-animal.md) | WhatsApp no detalhe (contato do responsável) | aprovada e implementada |
 | [015](./015-proxy-api-metro-expo-go.md) | Proxy da API pelo Metro (Expo Go / túnel) | aprovada e implementada |
+| [016](./016-busca-por-foto-similaridade.md) | Busca por foto / similaridade (RF0008) | aprovada e implementada |
 | — | Filtros de busca (RF0005) | planejada — fase 2 (não usa o 008) |
 | — | Upload de foto no painel web | planejada — consome backend spec 010 |
-| — | Busca por foto / IA (RF0008) | planejada — fase 2 (botão placeholder na 006) |
 
-Auth: login na 002, cadastro na 003, esqueci senha na 004. Listagem A/P/E é a 005. Cadastro P/E pelo usuário é a 007 (adoção só a ONG no web). Detalhe nas três listas é a 008. Entrada visual de busca por foto (P/E) é a 006 — **não** é o upload do animal. Perfil no header + aba Similaridade placeholder é a 009. Edição persistida do perfil é a 010 (lápis da 009; API já existe). Meus animais (listar / editar / excluir os P/E do usuário) é a 011 — fecha o RF0003 no mobile. Upload/captura da foto do animal (RF0007) é a **012** (consome backend spec 010; sem mudar a API). Upgrade da stack Expo para o Go 57 do iPhone é a **013** (sem feature nova). WhatsApp no detalhe (contato do responsável) é a **014** (consome backend spec 011; ícone só no detalhe). Proxy da API pelo Metro no Expo Go (túnel de campus) é a **015**.
+Auth: login na 002, cadastro na 003, esqueci senha na 004. Listagem A/P/E é a 005. Cadastro P/E pelo usuário é a 007 (adoção só a ONG no web). Detalhe nas três listas é a 008. Entrada visual de busca por foto (P/E) é a 006 — o fluxo real (RF0008) é a **016** (consome backend spec 012). Perfil no header + aba Similaridade (placeholder na 009; ativada na 016). Edição persistida do perfil é a 010 (lápis da 009; API já existe). Meus animais (listar / editar / excluir os P/E do usuário) é a 011 — fecha o RF0003 no mobile. Upload/captura da foto do animal (RF0007) é a **012** (consome backend spec 010; sem mudar a API). Upgrade da stack Expo para o Go 57 do iPhone é a **013** (sem feature nova). WhatsApp no detalhe (contato do responsável) é a **014** (consome backend spec 011; ícone só no detalhe). Proxy da API pelo Metro no Expo Go (túnel de campus) é a **015**.

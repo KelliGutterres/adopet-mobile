@@ -102,12 +102,36 @@ export async function pickAnimalJpeg(source) {
   }
 }
 
-export function showPhotoSourceAlert({ onCamera, onLibrary }) {
-  Alert.alert('Foto do animal', undefined, [
+export function showPhotoSourceAlert({ title = 'Foto do animal', onCamera, onLibrary }) {
+  Alert.alert(title, undefined, [
     { text: 'Tirar foto', onPress: onCamera },
     { text: 'Galeria', onPress: onLibrary },
     { text: 'Cancelar', style: 'cancel' },
   ]);
+}
+
+export function startPhotoSearch({ onPicked, onError, title = 'Buscar por foto' }) {
+  async function pick(source) {
+    try {
+      const uri = await pickAnimalJpeg(source);
+      onPicked(uri);
+    } catch (err) {
+      if (err instanceof ImagePickError && err.code === 'canceled') {
+        return;
+      }
+      if (err instanceof ImagePickError && err.code.startsWith('denied')) {
+        showPermissionDeniedAlert(err.code);
+        return;
+      }
+      onError?.(err);
+    }
+  }
+
+  showPhotoSourceAlert({
+    title,
+    onCamera: () => pick('camera'),
+    onLibrary: () => pick('library'),
+  });
 }
 
 export function showPermissionDeniedAlert(code) {

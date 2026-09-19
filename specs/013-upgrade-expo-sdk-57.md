@@ -131,7 +131,7 @@ Conclusão do refinamento: o AdoPet é um app **managed + Expo Go + JS + Navigat
 | 3 | Comando | `npx expo install expo@^57.0.0 --fix` depois `npx expo-doctor@latest`. Cache: `npx expo start -c` | Guia oficial do changelog 57 |
 | 4 | Piso do `expo` | **≥ 57.0.17** | Changelog 57 (27/08): memória Hermes + startup em dev |
 | 5 | JPEG (spec 012) | **A:** manter `manipulateAsync` | Ainda existe; a API nova não é o motivo desta fatia. Se o doctor/runtime recusar, aí sim migrar para `ImageManipulator.manipulate` + `saveAsync` **no mesmo arquivo**, mesmo resultado JPEG 0.7 |
-| 6 | HTTP | **A:** deixar o `fetch` global do SDK. Sem `EXPO_PUBLIC_USE_RN_FETCH=1` de antemão | Opt-out só se login, listagem ou `POST .../imagem` quebrarem |
+| 6 | HTTP | **B (2026-09-19):** `EXPO_PUBLIC_USE_RN_FETCH=1` | `expo/fetch` lança `Unsupported FormDataPart` em `{ uri, name, type }`; o app mascarava como “API fora do ar”. JSON ok; foto/comparar quebravam |
 | 7 | Node | README passa a pedir **Node 22.13+** (requisito oficial do SDK 57) | Hoje o README diz 20+ |
 | 8 | Código de produto | Telas, `app.json` plugins, `.env` e contratos **inalterados** salvo o ponto 5/6 se o teste falhar | Upgrade de ferramenta, não de feature |
 

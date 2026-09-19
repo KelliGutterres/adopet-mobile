@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AnimalListScreen from '../screens/AnimalListScreen';
+import SimilarityScreen from '../screens/SimilarityScreen';
 import BottomTabBar from '../components/BottomTabBar';
 
 const Tab = createBottomTabNavigator();
@@ -28,6 +29,11 @@ export default function MainTabNavigator() {
         component={AnimalListScreen}
         initialParams={{ status: 'A' }}
         options={{ title: 'Adoção', tabBarAccessibilityLabel: 'Adoção' }}
+      />
+      <Tab.Screen
+        name="Similaridade"
+        component={SimilarityScreen}
+        options={{ title: 'Similaridade', tabBarAccessibilityLabel: 'Similaridade' }}
       />
     </Tab.Navigator>
   );

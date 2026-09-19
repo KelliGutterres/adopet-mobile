@@ -250,6 +250,7 @@ export default function AnimalFormScreen() {
                 { name: 'Perdidos' },
                 { name: 'Encontrados' },
                 { name: 'Adocao' },
+                { name: 'Similaridade' },
               ],
               index: statusParam === 'P' ? 0 : 1,
             },

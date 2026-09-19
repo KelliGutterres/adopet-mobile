@@ -29,6 +29,8 @@ npx expo start --lan
 
 Com o túnel, o Metro **encaminha** `/auth`, `/animais`, `/usuarios`, `/ongs` e `/health` para `http://127.0.0.1:3000` no PC (spec 015). A API precisa estar no ar (`cd D:\adopet-backend && npm run dev`). Depois de mudar `metro.config.js`, **reinicie** o Metro e recarregue o app no Expo Go. Seed: `usuario@adopet.local` / `senha123`.
 
+No SDK 57 o `expo/fetch` **não envia** arquivo local no multipart. O `.env` precisa de `EXPO_PUBLIC_USE_RN_FETCH=1` (spec 013). Depois de mudar isso, **pare o Metro** e suba de novo com cache limpo: `npx expo start -c` (ou `npm run start:tunnel` depois do `-c` se estiver no campus).
+
 Não commitar `.env`.
 
 | Script | Uso |

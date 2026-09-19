@@ -15,6 +15,8 @@ Tirar o Perfil da barra inferior e tratá-lo como no painel web: **ícone redond
 
 O slot da barra que era Perfil passa a se chamar **Similaridade** — visível e **desabilitado** (“Em breve”). O fluxo real de IA (RF0008) **não** entra aqui; a autora ajusta essa aba depois.
 
+> **Atualização (2026-09-15):** a aba foi **ativada** na [spec 016](./016-busca-por-foto-similaridade.md). Este arquivo descreve o placeholder original.
+
 Cobre **RF0001** (consulta da conta; edição persistida **fora** — ponto 1-A), **RF0002** (encerrar sessão) e usabilidade (**RNF0001**).
 
 ## Recorte vs roadmap

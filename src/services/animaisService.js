@@ -74,6 +74,9 @@ export async function excluirAnimal(id) {
   });
 }
 
+const IMAGE_UPLOAD_TIMEOUT_MS = 90000;
+const COMPARE_TIMEOUT_MS = 90000;
+
 export async function enviarImagem(id, uri) {
   const idAnimal = parseIdAnimal(id);
   if (!idAnimal) {
@@ -90,7 +93,10 @@ export async function enviarImagem(id, uri) {
     type: 'image/jpeg',
   });
 
-  const data = await requestForm(`/animais/${idAnimal}/imagem`, formData);
+  const data = await requestForm(`/animais/${idAnimal}/imagem`, formData, {
+    timeoutMs: IMAGE_UPLOAD_TIMEOUT_MS,
+    timeoutMessage: 'O envio da foto demorou demais. Tente novamente.',
+  });
   return data?.animal ?? null;
 }
 
@@ -103,4 +109,24 @@ export async function removerImagem(id) {
   await requestJson(`/animais/${idAnimal}/imagem`, {
     method: 'DELETE',
   });
+}
+
+export async function compararAnimais(uri) {
+  if (!uri) {
+    throw new ApiError('imagem é obrigatório', 400);
+  }
+
+  const formData = new FormData();
+  formData.append('imagem', {
+    uri,
+    name: 'busca.jpg',
+    type: 'image/jpeg',
+  });
+
+  const data = await requestForm('/animais/comparar', formData, {
+    timeoutMs: COMPARE_TIMEOUT_MS,
+    timeoutMessage: 'A comparação demorou demais. Tente novamente.',
+  });
+
+  return Array.isArray(data?.candidatos) ? data.candidatos : [];
 }
