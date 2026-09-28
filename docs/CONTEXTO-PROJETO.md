@@ -145,6 +145,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 ### Web (ONG = administrador do painel)
 - [x] Autenticação da ONG (e-mail/senha) — RF0009
 - [x] Listagem de animais no painel (adoção, encontrados, perdidos) — RF0004 / RF0010 parcial (web spec 003)
+- [x] Comparação de similaridade no painel — RF0008 (web spec 013)
 - [ ] CRUD de animais para adoção (cadastro, edição, exclusão) — RF0003 / protótipos Fig. 16–17
 - [ ] Gerenciamento de usuários e registros de animais (casos de uso da ONG na Parte 1)
 - [ ] Telas de protótipo: login web; cadastro de animal; edição/gerenciamento
@@ -154,7 +155,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] Auth usuário e ONG; senhas criptografadas (RNF0002)
 - [ ] CRUD usuários, instituições/ONGs, animais, etc.
 - [ ] Integração Supabase Storage (upload/recuperação; salvar só URL/referência no PostgreSQL)
-- [x] Integração com serviço Python de comparação de imagens — **API no backend spec 012**; UI mobile spec 016
+- [x] Integração com serviço Python de comparação de imagens — **API no backend spec 012**; UI mobile spec 016; UI web spec 013
 - [ ] Filtros e listagens conforme RF0004–RF0006
 
 ### Serviço de IA (Python — dentro de `adopet-backend`)
@@ -398,6 +399,8 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-01 | Mobile: foto do animal (spec 012); cadastro P/E exige foto no app e chama `POST /animais` + `POST .../imagem`; JPEG no cliente (HEIC iOS); listas/detalhe exibem `urlImagem` | Spec 012 / autora |
 | 2026-09-07 | Mobile: WhatsApp no detalhe (spec 014); ícone abaixo do responsável; `wa.me` com o `contato` do tutor (backend 011) | Spec 014 / autora |
 | 2026-09-15 | Mobile: busca por foto / similaridade (spec 016); aba Similaridade + botão P/E chamam `POST /animais/comparar`; score em %; foto da busca não grava no Storage | Spec 016 / autora |
+| 2026-09-19 | Web spec 013 (em revisão): painel consome a mesma `POST /animais/comparar` via menu Comparação de Similaridade | Web spec 013 |
+| 2026-09-28 | Web spec 013 implementada: `/painel/similaridade`; timeout 90 s; tabela com score e situação | Web spec 013 |
 | 2026-09-19 | Upload da foto do animal: timeout 90 s (não mais 20 s) para não parecer “API fora do ar” | Spec 012 / 016 |
 | 2026-09-19 | `EXPO_PUBLIC_USE_RN_FETCH=1`: expo/fetch do SDK 57 recusa FormData com `uri` e o upload parecia “API fora do ar” | Spec 013 / correção |
 | 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
@@ -464,3 +467,5 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-15 | Spec 016: busca por foto / similaridade; aba Similaridade + câmera P/E → `POST /animais/comparar`; score em % nos cards |
 | 2026-09-19 | Timeout de 90 s também em `POST /animais/:id/imagem` (evita falso “API fora do ar”) |
 | 2026-09-19 | Spec 013 decisão 6-B: `EXPO_PUBLIC_USE_RN_FETCH=1` — upload multipart no Expo Go 57 |
+| 2026-09-19 | Web spec 013 (em revisão): Comparação de Similaridade no painel; mesma `POST /animais/comparar` |
+| 2026-09-28 | Web spec 013 implementada: menu Comparação de Similaridade em `/painel/similaridade` |
