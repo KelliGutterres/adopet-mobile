@@ -80,7 +80,7 @@ perdidos ou encontrados parecidos
 - Alterar o `adopet-backend` (limiar, limite, modelo, `Transacao`, embedding)
 - Guardar a foto da busca no Storage
 - Comparar animais de **adoção**
-- Query `limite` / `minScore` / `statusAlvo` na UI (usar **padrão da API**: 5, 0,5, `P,E`)
+- Query `limite` / `minScore` / `statusAlvo` na UI (usar **padrão da API**: 5, 0,6, `P,E`)
 - Filtros avançados (RF0005)
 - Ajustar o limiar no app
 - Histórico de buscas / lista de `Transacao`
@@ -109,7 +109,7 @@ perdidos ou encontrados parecidos
 | Já pronto | Onde |
 |-----------|------|
 | `POST /animais/comparar` JWT + campo `imagem`; 200 `{ candidatos }`; 503 se Python fora | backend spec 012 |
-| Padrão: `limite=5`, `minScore=0.5`, `statusAlvo=P,E`; lista vazia ainda 200 | backend spec 012 |
+| Padrão: `limite=5`, `minScore=0.6`, `statusAlvo=P,E`; lista vazia ainda 200 | backend spec 012 |
 | `animal` no candidato = mesmo formato do `GET /animais/:id` (sem `embedding`) | backend spec 012 |
 | `pickAnimalJpeg` + `showPhotoSourceAlert` | spec 012 |
 | `requestForm` (multipart, sem `Content-Type: application/json`) | spec 012 / `api.js` |
