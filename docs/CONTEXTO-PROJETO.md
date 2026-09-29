@@ -402,6 +402,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-19 | Web spec 013 (em revisão): painel consome a mesma `POST /animais/comparar` via menu Comparação de Similaridade | Web spec 013 |
 | 2026-09-28 | Web spec 013 implementada: `/painel/similaridade`; timeout 90 s; tabela com score e situação | Web spec 013 |
 | 2026-09-28 | Resultados da busca por foto: a API devolve até 5 candidatos com score ≥ 60%; os cards mostram só esses | Backend spec 012 |
+| 2026-09-28 | Painel web: Dashboard em `/painel/dashboard` (web spec 015). API `GET /dashboard` (backend spec 014), só papel `ong`. Adotados = exclusões de animais que estavam para adoção. O app não consome esse endpoint | Web spec 015 / backend spec 014 |
 | 2026-09-19 | Upload da foto do animal: timeout 90 s (não mais 20 s) para não parecer “API fora do ar” | Spec 012 / 016 |
 | 2026-09-19 | `EXPO_PUBLIC_USE_RN_FETCH=1`: expo/fetch do SDK 57 recusa FormData com `uri` e o upload parecia “API fora do ar” | Spec 013 / correção |
 | 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
@@ -471,3 +472,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-19 | Web spec 013 (em revisão): Comparação de Similaridade no painel; mesma `POST /animais/comparar` |
 | 2026-09-28 | Web spec 013 implementada: menu Comparação de Similaridade em `/painel/similaridade` |
 | 2026-09-28 | Corte da comparação sobe para 60% na API (`minScore` 0,6); a aba Similaridade continua listando o que `POST /animais/comparar` devolve |
+| 2026-09-28 | Backend spec 014 + web spec 015: dashboard da ONG (`GET /dashboard`). O mobile não tem essa tela |
