@@ -93,7 +93,7 @@ adopet-mobile/
 └── app.json
 ```
 
-> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Similaridade (spec 009). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006; fluxo real spec 016). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013). WhatsApp no detalhe (spec 014; consome backend 011). API no Expo Go via proxy do Metro (spec 015). Busca por foto / similaridade (spec 016; consome backend 012).
+> Scaffold Expo + React Navigation: spec 001. Login JWT (spec 002). Cadastro (spec 003). Esqueci senha (spec 004). Listagem A/P/E (spec 005). Cadastro P/E pelo usuário (spec 007). Detalhe A/P/E (spec 008). Perfil no header + aba Busca por Foto (spec 009; rótulo atualizado em 2026-09-30). Edição de perfil (spec 010). Meus animais — listar/editar/excluir P/E (spec 011). Botão buscar por foto P/E (spec 006; fluxo real spec 016). Upload/captura da foto do animal (spec 012). Stack Expo SDK 57 (spec 013). WhatsApp no detalhe (spec 014; consome backend 011). API no Expo Go via proxy do Metro (spec 015). Busca por foto / similaridade (spec 016; consome backend 012).
 
 Backend (quando a fase de IA começar):
 
@@ -130,7 +130,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 ### Mobile (usuário)
 - [x] Scaffold Expo + pastas + nav + cliente HTTP (spec 001)
 - [x] Cadastro de conta (dados pessoais, e-mail, senha, contato, cidade) — RF0001 parcial (spec 003)
-- [x] Consulta de perfil + logout (avatar no header; aba Similaridade — spec 009; fluxo RF0008 na spec 016)
+- [x] Consulta de perfil + logout (avatar no header; aba Busca por Foto — spec 009; fluxo RF0008 na spec 016)
 - [x] Edição de conta (nome, e-mail, contato, cidade; sem senha) — RF0001 (spec 010)
 - [x] Login (e-mail/senha) — RF0002
 - [x] Esqueci senha (redefinir via e-mail) — RF0002 parcial (spec 004)
@@ -139,7 +139,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
 - [x] Detalhes do animal (fotos, descrição, localização, WhatsApp do responsável — specs 008, 012 e 014) — RF0006
 - [x] Upload por galeria ou câmera (spec 012; consome backend spec 010) — RF0007
-- [x] Comparação inteligente de imagens — RF0008 (spec 016; botão P/E da spec 006 + aba Similaridade da spec 009; consome backend spec 012)
+- [x] Comparação inteligente de imagens — RF0008 (spec 016; botão P/E da spec 006 + aba Busca por Foto da spec 009; consome backend spec 012)
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
 
 ### Web (ONG = administrador do painel)
@@ -330,7 +330,7 @@ Critério de pronto: [comportamento verificável]
 - Organização: `screens` / `components` / `navigation` / `services` / `hooks` / `context` / `theme`.
 - Execução: **Expo** (`npx expo start`); testar no **Expo Go** e no **emulador Android**.
 - Cliente HTTP: `fetch` em `src/services/api.js`; base URL em `EXPO_PUBLIC_API_URL` (no Expo Go, origem do Metro + proxy local, spec 015).
-- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E, detalhe, perfil, Meus animais e Similaridade na área logada, specs 005, 007, 008, 009, 011 e 016).
+- Navegação: **React Navigation** (`native-stack` na auth; `bottom-tabs` + stack para cadastro P/E, detalhe, perfil, Meus animais e Busca por Foto na área logada, specs 005, 007, 008, 009, 011 e 016). A rota interna da aba continua `Similaridade`.
 - Estilo: `StyleSheet` + `src/theme/colors.js`.
 - Sessão: JWT no **SecureStore** (`expo-secure-store`) + `AuthContext`; Bearer injetado no `api.js`.
 - Loading, empty state e erro em listas (nas specs de listagem).
@@ -407,6 +407,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-19 | `EXPO_PUBLIC_USE_RN_FETCH=1`: expo/fetch do SDK 57 recusa FormData com `uri` e o upload parecia “API fora do ar” | Spec 013 / correção |
 | 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
 | 2026-09-10 | Expo Go: API via proxy do Metro (spec 015); no túnel o celular não alcança `:3000` direto | Spec 015 / autora |
+| 2026-09-30 | Rótulo da busca por foto: aba e título no mobile, menu e título no painel, passam a **Busca por Foto**. Rota interna, API e coluna de score permanecem | Autora |
 
 ---
 
@@ -426,7 +427,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] Botão buscar por foto em P/E (placeholder spec 006; fluxo real spec 016)
 - [x] Cadastro mobile de animal perdido/encontrado (spec 007)
 - [x] Detalhe mobile A/P/E (spec 008)
-- [x] Perfil mobile (consulta + logout + aba Similaridade — spec 009)
+- [x] Perfil mobile (consulta + logout + aba Busca por Foto — spec 009)
 - [x] Edição de perfil mobile (`PATCH /usuarios/me` — spec 010)
 - [x] Meus animais mobile (listar / editar / excluir P/E — spec 011)
 - [x] Upload/captura de foto do animal no mobile (spec 012; RF0007)
@@ -473,3 +474,4 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-28 | Web spec 013 implementada: menu Comparação de Similaridade em `/painel/similaridade` |
 | 2026-09-28 | Corte da comparação sobe para 60% na API (`minScore` 0,6); a aba Similaridade continua listando o que `POST /animais/comparar` devolve |
 | 2026-09-28 | Backend spec 014 + web spec 015: dashboard da ONG (`GET /dashboard`). O mobile não tem essa tela |
+| 2026-09-30 | Aba e título da busca por foto no app, e menu e título no painel, passam a **Busca por Foto** |

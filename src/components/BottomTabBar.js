@@ -14,7 +14,7 @@ const ITEMS = [
   { key: 'Encontrados', label: 'Encontrados', Icon: FoundTabIcon },
   { key: 'Cadastrar', label: 'Cadastrar', fab: true },
   { key: 'Adocao', label: 'Adoção', Icon: HeartIcon },
-  { key: 'Similaridade', label: 'Similaridade', Icon: SimilarityTabIcon },
+  { key: 'Similaridade', label: 'Busca por Foto', Icon: SimilarityTabIcon },
 ];
 
 function themeForRoute(routeName) {
@@ -68,7 +68,7 @@ export default function BottomTabBar({ state, navigation }) {
               style={styles.slot}
             >
               <item.Icon color={colors.placeholder} size={22} />
-              <Text style={[styles.label, styles.labelDisabled]} numberOfLines={1}>
+              <Text style={[styles.label, styles.labelDisabled]} numberOfLines={2}>
                 {item.label}
               </Text>
             </Pressable>
@@ -102,7 +102,7 @@ export default function BottomTabBar({ state, navigation }) {
             style={styles.slot}
           >
             <item.Icon color={color} size={22} />
-            <Text style={[styles.label, { color }]} numberOfLines={1}>
+            <Text style={[styles.label, { color }]} numberOfLines={2}>
               {item.label}
             </Text>
           </Pressable>
@@ -135,6 +135,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
     textAlign: 'center',
+    lineHeight: 12,
+    minHeight: 24,
   },
   labelDisabled: {
     color: colors.placeholder,
@@ -157,5 +159,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     color: colors.muted,
+    textAlign: 'center',
+    lineHeight: 12,
+    minHeight: 24,
   },
 });
