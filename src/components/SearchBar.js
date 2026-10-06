@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { colors } from '../theme/colors';
-import { CameraIcon, FunnelIcon, SearchIcon } from './ListIcons';
+import { CameraIcon, SearchIcon } from './ListIcons';
 
 export default function SearchBar({
   value,
@@ -40,17 +40,6 @@ export default function SearchBar({
           <CameraIcon color={colors.text} size={18} />
         </Pressable>
       ) : null}
-      <Pressable
-        disabled
-        accessibilityRole="button"
-        accessibilityLabel="Filtros"
-        accessibilityHint="Em breve"
-        accessibilityState={{ disabled: true }}
-        style={styles.filters}
-      >
-        <FunnelIcon color={colors.text} size={16} />
-        <Text style={styles.filtersText}>Filtros</Text>
-      </Pressable>
     </View>
   );
 }
@@ -78,23 +67,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 14,
     paddingVertical: 8,
-  },
-  filters: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 12,
-    minHeight: 44,
-    opacity: 0.7,
-  },
-  filtersText: {
-    color: colors.text,
-    fontWeight: '600',
-    fontSize: 13,
   },
   photoSearch: {
     width: 44,

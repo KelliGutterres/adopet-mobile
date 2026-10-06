@@ -30,14 +30,6 @@ export function SearchIcon({ color = colors.icon, size = 18 }) {
   );
 }
 
-export function FunnelIcon({ color = colors.text, size = 16 }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>
-      <Path d="M4 5h16l-6.5 8v5l-3 1.5v-6.5L4 5z" stroke={color} strokeWidth={1.8} {...STROKE} />
-    </Svg>
-  );
-}
-
 export function CameraIcon({ color = colors.text, size = 18 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden>

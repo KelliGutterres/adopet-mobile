@@ -136,10 +136,11 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [x] Esqueci senha (redefinir via e-mail) — RF0002 parcial (spec 004)
 - [x] Cadastro de animais perdidos/encontrados pelo usuário (spec 007); edição/exclusão dos próprios P/E (spec 011); adoção (ONG/web) — RF0003
 - [x] Listagem: adoção, perdidos, localizados/encontrados — RF0004 (spec 005)
-- [ ] Filtros: situação, espécie, porte, idade, localização, status — RF0005
+- Filtros avançados (RF0005): **cancelados** em 2026-10-05. Sem query extra na API. A busca textual permanece; o botão Filtros saiu da listagem
 - [x] Detalhes do animal (fotos, descrição, localização, WhatsApp do responsável — specs 008, 012 e 014) — RF0006
 - [x] Upload por galeria ou câmera (spec 012; consome backend spec 010) — RF0007
 - [x] Comparação inteligente de imagens — RF0008 (spec 016; botão P/E da spec 006 + aba Busca por Foto da spec 009; consome backend spec 012)
+- [x] Sino de notificações no header (cadastro de animal por outra conta) — spec 017
 - [x] Telas de protótipo: autenticação/cadastro; listagem de animais (Fig. 13 spec 002; Fig. 15 spec 005)
 
 ### Web (ONG = administrador do painel)
@@ -156,7 +157,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 - [ ] CRUD usuários, instituições/ONGs, animais, etc.
 - [ ] Integração Supabase Storage (upload/recuperação; salvar só URL/referência no PostgreSQL)
 - [x] Integração com serviço Python de comparação de imagens — **API no backend spec 012**; UI mobile spec 016; UI web spec 013
-- [ ] Filtros e listagens conforme RF0004–RF0006
+- Filtros avançados (RF0005): **cancelados** em 2026-10-05. Listagens e detalhe (RF0004, RF0006) já entregues; `GET /animais` continua só com `?status=`
 
 ### Serviço de IA (Python — dentro de `adopet-backend`)
 - [x] Pasta `ai/` (ou similar) no mesmo repositório do backend
@@ -190,7 +191,7 @@ A IA **não** deve implementar feature sem spec correspondente em `specs/` (salv
 | RF0002 | Autenticar Usuário | Login com e-mail e senha | Obrigatória |
 | RF0003 | Manter Animais | ONGs e usuários cadastram, editam e excluem animais (nome, espécie, raça, idade, descrição, status, imagens) | Obrigatória |
 | RF0004 | Listagem de Animais | Lista de animais para adoção, perdidos e localizados | Obrigatória |
-| RF0005 | Filtros de Busca | Filtrar por situação, espécie, porte, idade, localização e status | Obrigatória |
+| RF0005 | Filtros de Busca | Filtrar por situação, espécie, porte, idade, localização e status. **Fora de escopo** desde 2026-10-05: não será implementado | Cancelado |
 | RF0006 | Detalhes do Animal | Fotos, descrição, localização e demais informações | Obrigatória |
 | RF0007 | Upload e Captura de Imagens | Galeria ou câmera do dispositivo | Obrigatória |
 | RF0008 | Comparação Inteligente de Imagens | Enviar imagem e comparar automaticamente com as já cadastradas | Obrigatória |
@@ -361,7 +362,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 ### Fase 2 — demais funcionalidades (depois do CRUD)
 
 6. Storage Supabase (imagens)
-7. Filtros avançados, perdidos/encontrados no mobile
+7. ~~Filtros avançados~~ — cancelados (2026-10-05). Perdidos/encontrados no mobile já entregues
 8. Upload/câmera (RF0007)
 9. Serviço de IA (RF0008)
 10. Polimento + documentação para a banca
@@ -408,6 +409,8 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-10 | Expo Go em Wi-Fi de campus (ex.: Univates-Alunos): `--lan` timeout + tela branca no retry; usar `npm run start:tunnel` e não clicar em Tentar novamente | Operação / autora |
 | 2026-09-10 | Expo Go: API via proxy do Metro (spec 015); no túnel o celular não alcança `:3000` direto | Spec 015 / autora |
 | 2026-09-30 | Rótulo da busca por foto: aba e título no mobile, menu e título no painel, passam a **Busca por Foto**. Rota interna, API e coluna de score permanecem | Autora |
+| 2026-10-05 | RF0005 (filtros por idade, localização e painel de filtros) fica fora de escopo. Sem spec e sem query extra em `GET /animais`. No app permanece a busca textual; o botão Filtros sai da listagem | Autora |
+| 2026-10-05 | Sino do header abre a lista de notificações de cadastro de animal (A/P/E) feito por outra conta. Consome `GET/PATCH /notificacoes` (backend spec 015). O próprio cadastro não aparece | Spec 017 |
 
 ---
 
@@ -435,6 +438,7 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 - [x] WhatsApp no detalhe do animal (spec 014; consome backend spec 011)
 - [x] Proxy da API pelo Metro no Expo Go / túnel (spec 015)
 - [x] Busca por foto / similaridade no mobile (spec 016; RF0008; consome backend spec 012)
+- [x] Filtros avançados (RF0005) — cancelados em 2026-10-05; não implementar
 - [ ] Padronizar envelope de resposta da API e códigos de erro
 - [x] Anexar protótipos/diagramas em `docs/` (Fig. 13 e Fig. 15 no mobile)
 
@@ -475,3 +479,5 @@ Foco: **cadastro, edição e exclusão** (CRUD), com autenticação JWT.
 | 2026-09-28 | Corte da comparação sobe para 60% na API (`minScore` 0,6); a aba Similaridade continua listando o que `POST /animais/comparar` devolve |
 | 2026-09-28 | Backend spec 014 + web spec 015: dashboard da ONG (`GET /dashboard`). O mobile não tem essa tela |
 | 2026-09-30 | Aba e título da busca por foto no app, e menu e título no painel, passam a **Busca por Foto** |
+| 2026-10-05 | RF0005 cancelado: filtros avançados não serão implementados; botão Filtros removido da listagem do app |
+| 2026-10-05 | Spec 017: sino do header deixa de ser “Em breve” e lista notificações de cadastro de animal |

@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNotificacoes } from '../context/NotificacoesContext';
 import { useAuth } from '../hooks/useAuth';
 import { displayNomeUsuario, iniciaisUsuario } from '../services/userLabels';
 import { colors } from '../theme/colors';
@@ -11,7 +12,12 @@ export default function AppHeader({ primaryColor }) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { usuario } = useAuth();
+  const { naoLidas } = useNotificacoes();
   const iniciais = iniciaisUsuario(displayNomeUsuario(usuario));
+  const rotulo =
+    naoLidas > 0
+      ? `Notificações, ${naoLidas} não ${naoLidas === 1 ? 'lida' : 'lidas'}`
+      : 'Notificações';
 
   return (
     <View style={[styles.wrap, { backgroundColor: primaryColor, paddingTop: insets.top + 8 }]}>
@@ -22,14 +28,17 @@ export default function AppHeader({ primaryColor }) {
         </View>
         <View style={styles.actions}>
           <Pressable
-            disabled
+            onPress={() => navigation.navigate('Notifications')}
             accessibilityRole="button"
-            accessibilityLabel="Notificações"
-            accessibilityHint="Em breve"
-            accessibilityState={{ disabled: true }}
-            style={[styles.action, styles.bell]}
+            accessibilityLabel={rotulo}
+            style={styles.action}
           >
             <BellIcon color={colors.surface} size={22} />
+            {naoLidas > 0 ? (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{naoLidas > 9 ? '9+' : String(naoLidas)}</Text>
+              </View>
+            ) : null}
           </Pressable>
           <Pressable
             onPress={() => navigation.navigate('Profile')}
@@ -78,8 +87,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bell: {
-    opacity: 0.9,
+  badge: {
+    position: 'absolute',
+    top: 4,
+    right: 2,
+    minWidth: 16,
+    height: 16,
+    paddingHorizontal: 3,
+    borderRadius: 8,
+    backgroundColor: colors.danger,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: {
+    color: colors.surface,
+    fontSize: 9,
+    fontWeight: '800',
   },
   avatar: {
     width: 36,

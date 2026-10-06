@@ -2,7 +2,7 @@ const http = require('http');
 const { getDefaultConfig } = require('expo/metro-config');
 
 const API_ORIGIN = 'http://127.0.0.1:3000';
-const API_PREFIXES = ['/health', '/auth', '/animais', '/usuarios', '/ongs'];
+const API_PREFIXES = ['/health', '/auth', '/animais', '/usuarios', '/ongs', '/notificacoes'];
 
 function shouldProxy(urlPath) {
   const path = String(urlPath || '').split('?')[0];
