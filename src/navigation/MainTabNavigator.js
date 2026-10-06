@@ -33,7 +33,7 @@ export default function MainTabNavigator() {
       <Tab.Screen
         name="Similaridade"
         component={SimilarityScreen}
-        options={{ title: 'Busca por Foto', tabBarAccessibilityLabel: 'Busca por Foto' }}
+        options={{ title: 'Busca por Imagem', tabBarAccessibilityLabel: 'Busca por Imagem' }}
       />
     </Tab.Navigator>
   );

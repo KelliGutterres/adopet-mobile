@@ -14,7 +14,7 @@ const ITEMS = [
   { key: 'Encontrados', label: 'Encontrados', Icon: FoundTabIcon },
   { key: 'Cadastrar', label: 'Cadastrar', fab: true },
   { key: 'Adocao', label: 'Adoção', Icon: HeartIcon },
-  { key: 'Similaridade', label: 'Busca por Foto', Icon: SimilarityTabIcon },
+  { key: 'Similaridade', label: 'Busca por Imagem', Icon: SimilarityTabIcon },
 ];
 
 function themeForRoute(routeName) {

@@ -106,7 +106,7 @@ export default function SimilarityScreen({ navigation, route }) {
       <View style={{ backgroundColor: colors.primary }}>
         <AppHeader primaryColor={colors.primary} />
         <View style={styles.heading}>
-          <Text style={styles.title}>Busca por Foto</Text>
+          <Text style={styles.title}>Busca por Imagem</Text>
           <Text style={styles.subtitle}>
             Envie uma foto para encontrar animais perdidos ou encontrados parecidos
           </Text>

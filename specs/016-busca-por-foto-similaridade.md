@@ -2,6 +2,7 @@
 
 > **Status:** aprovada e implementada (2026-09-15).  
 > **Atualização (2026-09-30):** o rótulo visível da aba e o título da tela passaram de **Similaridade** para **Busca por Foto**. A rota interna continua `Similaridade`. O botão segue **Buscar por foto**.  
+> **Atualização (2026-10-05):** aba e título passam a **Busca por Imagem**. A rota interna continua `Similaridade`. O botão segue **Buscar por foto**.  
 > Depende de: spec 006 (botão câmera P/E); spec 009 (aba Similaridade); spec 012 (`expo-image-picker` + JPEG); spec 008 (detalhe); spec 015 (proxy Metro); **backend spec 012** (`POST /animais/comparar`).  
 > **Não altera** o `adopet-backend` nesta fatia (contrato já na API 012).  
 > **Não altera** o `adopet-web` (painel da ONG não busca por foto nesta fase).  
